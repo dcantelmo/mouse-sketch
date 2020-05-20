@@ -1,7 +1,7 @@
 <template>
     <div class="img-wrapper">
+        <img class="image" :src="img_src" alt="">
         <span v-if="tooltip" class="tooltiptext">{{tooltip}}</span>
-        <img :src="img_src" alt="">
     </div>
 </template>
 
@@ -21,34 +21,31 @@
 img {
     width: auto;
     height: 200px;
-    border: 3px solid rgb(200,219,253);
+    border: 3px solid rgb(133, 164, 190);
 }
 
 .img-wrapper {
     display: flex;
     flex-direction: column;
-    min-width: 200px;
-    max-width: 200px;
     margin: 1rem;
+    border: 15px solid white;
     border-radius: 5px;
+    z-index: 1;
+    -webkit-box-shadow: 4px 4px 3px 0px rgba(0,0,0,0.4);
+    -moz-box-shadow: 4px 4px 3px 0px rgba(0,0,0,0.4);
+    box-shadow: 4px 4px 3px 0px rgba(0,0,0,0.4);
 }
 
 .img-wrapper .tooltiptext{
-  opacity: 0;
-  color: rgb(101, 157, 255);
+  opacity: 1;
+  color: rgb(133, 164, 190);;
   font-weight: 600;
-  border: 3px solid rgb(200,219,253);
-  border-bottom: none;
-  border-radius: 0px 10px 0px 0px;
+  background-color: white;
+  border-top: none;
   padding: 5px 0;
   /* Position the tooltip */
   overflow: hidden;
-  transition: .2s;
-  
 }
 
-.img-wrapper:hover  .tooltiptext{
-  visibility: visible;
-  opacity: 1;
-}
+
 </style>
