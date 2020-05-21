@@ -26,9 +26,15 @@ export default {
     getUserProfile(user) {
         return apiClient.get(`/profile/${user}`);
     },
+    saveToGallery(multiform) {
+        return apiClient.post(`/draw`, multiform);
+    },
+    galleryOptions(data,user) {
+        return apiClient.post(`/profile/${user}/gallery/option`, data);
+    },
     methods: {
         setToken(token) {
-            axios.defaults.headers.common[
+            apiClient.defaults.headers.common[
                 'Authorization'
             ] = `Bearer ${token}`;
         }

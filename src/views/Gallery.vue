@@ -2,6 +2,7 @@
     <div class="container-fluid main-container">
         <div class="gallery-card">
             <div class="gallery-scroll overflow-auto">
+                <h1 v-if="urls == ''">La galleria è vuota! Comincia a disegnare :)</h1>
                 <ImageBox
                     :id="image.name"
                     :class="clicked == image.name ? 'active': ''"
@@ -15,11 +16,11 @@
         </div>
         <div class="menu" ref="customMenu">
             <ul class="menu-options">
-                <li class="menu-option">Imposta avatar</li>
+                <li @click="setAvatar" class="menu-option">Imposta avatar</li>
                 <li class="menu-option">Salva</li>
-                <li class="menu-option">Modifica nome</li>
+                <li @click="rename" class="menu-option">Modifica nome</li>
                 <hr class="divider" />
-                <li class="menu-option">Elimina</li>
+                <li @click="removeImg" class="menu-option">Elimina</li>
             </ul>
         </div>
     </div>
@@ -33,26 +34,17 @@ export default {
     data() {
         return {
             urls: [],
-            clicked: null
+            clicked: null,
+            selectedTooltip: null,
+            lastClicked: null,
+            lastTooltip: null
         };
     },
     components: {
         ImageBox
     },
     created() {
-        EventService.getImagesURL(this.$route.params['user'])
-            .then(response => {
-                this.urls = [];
-                response.data.forEach(element => {
-                    this.urls.push({
-                        path: EventService.baseURL + element.path.substr(1),
-                        name: element.name
-                    });
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        this.getGallery();
     },
     beforeRouteLeave(to, from, next) {
         this.urls = [];
@@ -60,13 +52,16 @@ export default {
     },
     mounted() {
         //Se l'utente è il proprietario della gallery, monta il context menù per interagire con i disegni (i controlli vanno effettuati anche lato server)
-        if (this.$store.state.user.user.nickname == this.$route.params['user']) {
+        if (
+            this.$store.state.user.user.nickname == this.$route.params['user']
+        ) {
             const menu = this.$refs['customMenu'];
             this.menuVisible = false;
 
             const toggleMenu = command => {
                 if (command == 'none') {
                     this.clicked = null;
+                    this.selectedTooltip = null;
                 }
 
                 menu.style.display = command;
@@ -75,7 +70,8 @@ export default {
             const setPosition = ({ top, left }, target) => {
                 menu.style.left = `${left}px`;
                 menu.style.top = `${top}px`;
-                this.clicked = target.id;
+                this.lastClicked = this.clicked = target.id;
+                this.lastTooltip = this.selectedTooltip = target.childNodes[1];
                 toggleMenu('block');
             };
 
@@ -93,7 +89,7 @@ export default {
                     left: e.pageX,
                     top: e.pageY
                 };
-                if (e.target.className === 'image')
+                if (e.target.parentNode.className.includes('imageBox'))
                     setPosition(origin, e.target.parentNode);
                 else toggleMenu('none');
                 return false;
@@ -101,16 +97,87 @@ export default {
         }
     },
     methods: {
-        save() {
-            if(this.clicked){
-                urls
+        getGallery() {
+            EventService.getImagesURL(this.$route.params['user'])
+                .then(response => {
+                    this.urls = [];
+                    response.data.forEach(element => {
+                        this.urls.push({
+                            path: EventService.baseURL + element.path.substr(1),
+                            name: element.name
+                        });
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        rename() {
+            this.lastTooltip.addEventListener('blur', event => {
+                event.target.contentEditable = 'false';
+                let data = {
+                    mode: 'RENAME',
+                    oldTitle: this.lastClicked,
+                    newTitle: event.target.textContent
+                };
+                EventService.galleryOptions(
+                    data,
+                    this.$store.state.user.user.nickname
+                ).then(() => {
+                    location.reload();
+                }).catch(err => {
+                    console.log(err.response.data);
+                    event.target.textContent = data.oldTitle;
+                    location.reload();
+                });
+            });
+            this.lastTooltip.addEventListener('keydown', event => {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    event.target.blur();
+                }
+            });
+            this.lastTooltip.contentEditable = 'true';
+            this.lastTooltip.focus();
+            console.log('rinominazione in corso');
+        },
+        removeImg() {
+            let data = {
+                mode: 'DELETE',
+                title: this.lastClicked,
+                author: this.$route.params.user
             }
+            EventService.galleryOptions(data, this.$route.params.user).then(() => {
+                console.log('rimosso');
+                this.lastClicked = null;
+                this.lastTooltip = null;
+                for(let i = 0; i < this.urls.length; i++){
+                    if(this.urls[i].name == data.title)
+                        this.urls.splice(i,1);
+                }
+            }).catch((err) => {console.log('megaerrore')})
+        },
+        setAvatar() {
+            let data = {
+                mode: 'SET_AVATAR',
+                title: this.lastClicked,
+                author: this.$route.params.user
+            }
+            EventService.galleryOptions(data, this.$route.params.user).then((response) => {
+                console.log(response);
+            })
         }
     }
 };
 </script>
 
 <style scoped>
+h1 {
+    font-size: 45px;
+    color: rgba(36, 98, 190, 0.356);
+    font-weight: 700;
+}
+
 .main-container {
     padding: 2rem;
     height: calc(100vh - 85px);

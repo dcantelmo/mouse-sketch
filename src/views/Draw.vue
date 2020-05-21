@@ -4,7 +4,13 @@
             <div class="col users-container"></div>
             <div class="col canvas-container">
                 <input type="text" name="title" v-model="title" autocomplete="false" />
-                <canvas ref="canvas" id="vueCanvas" class="canvas cursor" :width="width" :height="width"></canvas>
+                <canvas
+                    ref="canvas"
+                    id="vueCanvas"
+                    class="canvas cursor"
+                    :width="width"
+                    :height="width"
+                ></canvas>
                 <div class="row toolbar">
                     <div class="col-2 trash">
                         <button @click="clear()">Erase</button>
@@ -39,7 +45,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import EventService from '@/services/EventService.js';
 
 export default {
     data() {
@@ -235,20 +241,11 @@ export default {
             bodyFormData.set('title', this.title);
             bodyFormData.append('file', blob);
 
-            let config = {
-                header: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            };
-
-            axios
-                .post('//localhost:3000/draw', bodyFormData)
+            EventService.saveToGallery(bodyFormData)
                 .then(res => {
                     console.log(res);
                 })
-                .catch(err => {
-                    console.log(err);
-                });
+                .catch(err => console.log(err));
         }
     }
 };
@@ -267,19 +264,19 @@ export default {
 }
 
 .toolbar {
-    margin-top: .5rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    background-color:rgba(255, 255, 255, 0.75);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.75);
     border-radius: 5px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
 
-button{
+button {
     border-radius: 5px;
-    background-color:rgb(200,219,253);
+    background-color: rgb(200, 219, 253);
     color: rgb(53, 66, 94);
-    border-color:rgb(200,219,253);
+    border-color: rgb(200, 219, 253);
 }
 
 .user-container {

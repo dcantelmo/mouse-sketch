@@ -4,7 +4,7 @@
             <div class="col-5 profile-container">
                 <div class="profile-picture">
                     <div class="img-wrapper">
-                        <img src="../assets/Mouseprova.png" alt="immagine del profilo" />
+                        <img :src="av_url" alt="immagine del profilo" />
                     </div>
                 </div>
                 <div class="profile-info">
@@ -12,7 +12,7 @@
                         <p>{{localUser.nickname}}</p>
                     </div>
                     <div class="draw-box">
-                        <p>Numero disegni</p>
+                        <p>Numero disegni: {{localUser.drawings}}</p>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,10 @@ export default {
         });
     },
     computed: {
-        ...mapState(['user'])
+        ...mapState(['user']),
+        av_url() {
+            return EventService.baseURL + this.localUser.avatar.substr(1)
+        }
     }
 };
 </script>
