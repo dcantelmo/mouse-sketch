@@ -3,7 +3,10 @@
         <div class="row">
             <div class="col users-container"></div>
             <div class="col canvas-container">
-                <input type="text" name="title" v-model="title" autocomplete="false" />
+                <div class="col upper_toolbar">
+                    <input type="text" name="title" v-model="title" autocomplete="false"/>
+                     <img id="salva" src="../assets/salva.png" @click="saveImage()">
+                </div>
                 <canvas
                     ref="canvas"
                     id="vueCanvas"
@@ -13,7 +16,8 @@
                 ></canvas>
                 <div class="row toolbar">
                     <div class="col-2 trash">
-                        <button @click="clear()">Erase</button>
+                        <img id="gomma" src="../assets/gomma.png">
+                        <img id="undo" src="../assets/annulla.png" @click="redraw()">
                     </div>
                     <div class="col-8 color-panel">
                         <div class="row first-row">
@@ -34,8 +38,7 @@
                         </div>
                     </div>
                     <div class="col-2 undo">
-                        <button @click="redraw()">Undo</button>
-                        <button @click="saveImage()">Save</button>
+                        <img id="erase" src="../assets/trash.png" @click="clear()">                   
                     </div>
                 </div>
             </div>
@@ -52,7 +55,7 @@ export default {
         return {
             width: 600,
             height: 600,
-            title: 'immagine',
+            title: 'Immagine',
             context: null,
             isDrawing: false,
             history: [],
@@ -256,28 +259,49 @@ export default {
     margin: 0;
 }
 
-.undo,
-.trash {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#salva{
+    margin-left: 20px;
+}
+#erase{
+    margin-top: 20px;
 }
 
+
 .toolbar {
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.75);
+    height: 100%;
+    width: 100%;
+    margin-top: .5rem;
+    margin-bottom: 2.5rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    background-color:rgba(255, 255, 255, 0.75);
     border-radius: 5px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
 
-button {
+.upper_toolbar{
+    margin-top: 5rem;
+    margin-bottom: .5rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    background-color:rgba(255, 255, 255, 0.75);
     border-radius: 5px;
-    background-color: rgb(200, 219, 253);
-    color: rgb(53, 66, 94);
-    border-color: rgb(200, 219, 253);
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
+
+input{
+    border-radius: 5px;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+button{
+    border-radius: 5px;
+    background-color:rgb(200,219,253);
+    color: rgb(53, 66, 94);
+    border-color:rgb(200,219,253);
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
 
 .user-container {
     display: flex;
@@ -299,6 +323,7 @@ button {
 /* CANVAS */
 
 .canvas {
+    height: 75%;
     background-color: white;
     user-select: none;
     border-radius: 5px;
@@ -308,11 +333,11 @@ button {
 /* COLOR BOXES */
 
 .color-box {
-    width: 60px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     margin-top: 4px;
     margin-left: 4px;
-    cursor: pointer;
+    cursor: "pointer";
     border-radius: 25px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
@@ -366,7 +391,7 @@ button {
     border: solid 2px lightgray;
 }
 
-.selected {
+.selected{
     border: 4px solid lightsalmon;
 }
 </style>
