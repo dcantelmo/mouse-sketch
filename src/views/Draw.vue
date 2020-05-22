@@ -1,11 +1,10 @@
 <template>
     <div class="main container-fluid">
         <div class="row">
-            <div class="col users-container"></div>
             <div class="col canvas-container">
-                <div class="col upper_toolbar">
-                    <input type="text" name="title" v-model="title" autocomplete="false"/>
-                     <img id="salva" src="../assets/salva.png" @click="saveImage()">
+                <div class="row toolbar">
+                    <input type="text" name="title" v-model="title" autocomplete="false" />
+                    <button @click="saveImage()">Save</button>
                 </div>
                 <canvas
                     ref="canvas"
@@ -15,11 +14,10 @@
                     :height="width"
                 ></canvas>
                 <div class="row toolbar">
-                    <div class="col-2 trash">
-                        <img id="gomma" src="../assets/gomma.png">
-                        <img id="undo" src="../assets/annulla.png" @click="redraw()">
+                    <div class="col-1 trash">
+                        <button @click="clear()">Erase</button>
                     </div>
-                    <div class="col-8 color-panel">
+                    <div class="col-10 color-panel">
                         <div class="row first-row">
                             <div id="red" class="col color-box red"></div>
                             <div id="yellow" class="col color-box yellow"></div>
@@ -37,25 +35,23 @@
                             <div id="white" class="col color-box white"></div>
                         </div>
                     </div>
-                    <div class="col-2 undo">
-                        <img id="erase" src="../assets/trash.png" @click="clear()">                   
+                    <div class="col-1 undo">
+                        <button @click="redraw()">Undo</button>
                     </div>
                 </div>
             </div>
-            <div class="col chat-container"></div>
         </div>
     </div>
 </template>
 
 <script>
 import EventService from '@/services/EventService.js';
-
 export default {
     data() {
         return {
             width: 600,
             height: 600,
-            title: 'Immagine',
+            title: 'immagine',
             context: null,
             isDrawing: false,
             history: [],
@@ -109,16 +105,12 @@ export default {
             this.history = [];
             this.point.x = 0;
             this.point.y = 0;
-
             this.currentOperation = 'source-over';
             this.context.globalCompositeOperation = this.currentOperation;
-
             this.selectedColor = '#000000';
             this.context.strokeStyle = this.selectedColor;
-
             this.lineWidth = 8;
             this.context.lineWidth = this.lineWidth;
-
             this.context.lineCap = 'round';
             this.context.lineJoin = 'round';
         },
@@ -186,18 +178,14 @@ export default {
         },
         redraw() {
             if (this.lastStrokeHistory.length < 2) return;
-
             let index = this.lastStrokeHistory[
                 this.lastStrokeHistory.length - 2
             ];
             if (this.history.length < index) return;
-
             this.context.clearRect(0, 0, this.width, this.height);
             this.history.length = index;
             this.lastStrokeHistory.pop();
-
             this.history.forEach(stroke => this._redraw(stroke));
-
             this.context.globalCompositeOperation = this.currentOperation;
             this.context.strokeStyle = this.selectedColor;
             this.context.lineWidth = this.lineWidth;
@@ -243,7 +231,6 @@ export default {
             let bodyFormData = new FormData();
             bodyFormData.set('title', this.title);
             bodyFormData.append('file', blob);
-
             EventService.saveToGallery(bodyFormData)
                 .then(res => {
                     console.log(res);
@@ -258,140 +245,96 @@ export default {
 .row {
     margin: 0;
 }
-
-#salva{
-    margin-left: 20px;
+.undo,
+.trash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-#erase{
-    margin-top: 20px;
-}
-
-
 .toolbar {
-    height: 100%;
-    width: 100%;
-    margin-top: .5rem;
-    margin-bottom: 2.5rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    background-color:rgba(255, 255, 255, 0.75);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.75);
     border-radius: 5px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
-
-.upper_toolbar{
-    margin-top: 5rem;
-    margin-bottom: .5rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    background-color:rgba(255, 255, 255, 0.75);
+button {
     border-radius: 5px;
-    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
-}
-
-input{
-    border-radius: 5px;
-    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
-}
-
-button{
-    border-radius: 5px;
-    background-color:rgb(200,219,253);
+    background-color: rgb(200, 219, 253);
     color: rgb(53, 66, 94);
-    border-color:rgb(200,219,253);
-    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+    border-color: rgb(200, 219, 253);
+    margin: 2px;
 }
-
-
 .user-container {
     display: flex;
 }
-
 .chat-container {
     display: flex;
 }
-
 .canvas-container {
-    height: 90vh;
     min-height: 750px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-
 /* CANVAS */
-
 .canvas {
-    height: 75%;
     background-color: white;
     user-select: none;
     border-radius: 5px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
-
 /* COLOR BOXES */
-
 .color-box {
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 35px;
     margin-top: 4px;
     margin-left: 4px;
-    cursor: "pointer";
+    cursor: pointer;
     border-radius: 25px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
-
 .red {
     background-color: #ff0000;
 }
-
 .orange {
     background-color: #ffc400;
 }
-
 .yellow {
     background-color: #ffff00;
 }
 .purple {
     background-color: #c400c4;
 }
-
 .green {
     background-color: #00c400;
 }
 .greenyellow {
     background-color: #a7ffa4;
 }
-
 .blue {
     background-color: #0000ff;
 }
-
 .turquoise {
     background-color: #74f7fc;
 }
-
 .brown {
     background-color: #994e1c;
 }
 .beige {
     background-color: #f0ba69;
 }
-
 .black {
     background-color: #000000;
 }
-
 .white {
     background-color: #ffffff;
 }
-
 .grey-border {
     border: solid 2px lightgray;
 }
-
-.selected{
+.selected {
     border: 4px solid lightsalmon;
 }
 </style>

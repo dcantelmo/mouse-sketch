@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid main-container">
+    <div ref="page" class="container-fluid main-container">
         <div class="gallery-card">
             <div class="gallery-scroll overflow-auto">
                 <h1 v-if="urls == ''">La galleria è vuota! Comincia a disegnare :)</h1>
@@ -55,6 +55,7 @@ export default {
         if (
             this.$store.state.user.user.nickname == this.$route.params['user']
         ) {
+            const page = this.$refs['page'];
             const menu = this.$refs['customMenu'];
             this.menuVisible = false;
 
@@ -75,15 +76,15 @@ export default {
                 toggleMenu('block');
             };
 
-            window.addEventListener('wheel', e => {
+            page.addEventListener('wheel', e => {
                 if (e.target.className !== 'menu-option') toggleMenu('none');
             });
 
-            window.addEventListener('click', e => {
+            page.addEventListener('click', e => {
                 toggleMenu('none');
             });
 
-            window.addEventListener('contextmenu', e => {
+            page.addEventListener('contextmenu', e => {
                 e.preventDefault();
                 const origin = {
                     left: e.pageX,
@@ -123,13 +124,15 @@ export default {
                 EventService.galleryOptions(
                     data,
                     this.$store.state.user.user.nickname
-                ).then(() => {
-                    location.reload();
-                }).catch(err => {
-                    console.log(err.response.data);
-                    event.target.textContent = data.oldTitle;
-                    location.reload();
-                });
+                )
+                    .then(() => {
+                        location.reload();
+                    })
+                    .catch(err => {
+                        console.log(err.response.data);
+                        event.target.textContent = data.oldTitle;
+                        location.reload();
+                    });
             });
             this.lastTooltip.addEventListener('keydown', event => {
                 if (event.keyCode === 13) {
@@ -146,27 +149,34 @@ export default {
                 mode: 'DELETE',
                 title: this.lastClicked,
                 author: this.$route.params.user
-            }
-            EventService.galleryOptions(data, this.$route.params.user).then(() => {
-                console.log('rimosso');
-                this.lastClicked = null;
-                this.lastTooltip = null;
-                for(let i = 0; i < this.urls.length; i++){
-                    if(this.urls[i].name == data.title)
-                        this.urls.splice(i,1);
-                }
-            }).catch((err) => {console.log('megaerrore')})
+            };
+            EventService.galleryOptions(data, this.$route.params.user)
+                .then(() => {
+                    console.log('rimosso');
+                    this.lastClicked = null;
+                    this.lastTooltip = null;
+                    for (let i = 0; i < this.urls.length; i++) {
+                        if (this.urls[i].name == data.title)
+                            this.urls.splice(i, 1);
+                    }
+                })
+                .catch(err => {
+                    console.log('megaerrore');
+                });
         },
         setAvatar() {
             let data = {
                 mode: 'SET_AVATAR',
                 title: this.lastClicked,
                 author: this.$route.params.user
-            }
-            EventService.galleryOptions(data, this.$route.params.user).then((response) => {
-                console.log(response);
-            })
+            };
+            EventService.galleryOptions(data, this.$route.params.user).then(
+                response => {
+                    console.log(response);
+                }
+            );
         }
+        //AUXILIARY ONLY
     }
 };
 </script>

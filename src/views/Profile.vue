@@ -17,7 +17,10 @@
                 </div>
             </div>
             <div class="col-7 option-container">
-                    <router-link :to="{name: 'gallery', params: {user: this.$route.params.user}}" class="navbar-brand navbar-link">
+                <router-link
+                    :to="{name: 'gallery', params: {user: this.$route.params.user}}"
+                    class="navbar-brand navbar-link"
+                >
                     <div class="option">Galleria</div>
                 </router-link>
                 <router-link to="/draw" class="navbar-brand navbar-link">
@@ -41,15 +44,18 @@ export default {
     },
     created() {
         console.log(this.$route.params.user);
-        EventService.getUserProfile(this.$route.params.user).then(({ data }) => {
-            this.localUser = data;
-            this.isLoading = false;
-        });
+        EventService.getUserProfile(this.$route.params.user).then(
+            ({ data }) => {
+                this.localUser = data;
+                this.isLoading = false;
+            }
+        );
     },
     computed: {
         ...mapState(['user']),
         av_url() {
-            return EventService.baseURL + this.localUser.avatar.substr(1)
+            console.log(this.localUser);
+            return EventService.baseURL + this.localUser.avatar.substr(1);
         }
     }
 };
@@ -93,7 +99,7 @@ a {
 }
 
 .profile-container {
-    border-right: dotted 8px rgb(200,219,253);
+    border-right: dotted 8px rgb(200, 219, 253);
     padding: 0;
 }
 
@@ -132,7 +138,7 @@ a {
     width: 100%;
     text-align: center;
     color: rgba(53, 66, 94, 0.75);
-    background-color:  rgba(255, 255, 255, 0.75);
+    background-color: rgba(255, 255, 255, 0.75);
     padding-left: 1rem;
     font-weight: 600;
     font-size: 5vw;
