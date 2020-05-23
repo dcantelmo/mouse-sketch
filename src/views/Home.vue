@@ -2,7 +2,7 @@
     <div class="container-fluid" style="padding: 0px">
         <section class="top-container container-fluid" style="padding: 0px">
             <div class="img-wrapper">
-                <img src="../assets/ORFF4C0.jpg" alt="">
+                <img src="../assets/Mouse2.png">
             </div>
         </section>
         <section class="container-fluid features-container">
@@ -53,6 +53,7 @@
     justify-content: center;
     align-items: center;
     padding: 0%;
+    background-color:rgba(200, 219, 253);
 }
 
 img {
@@ -64,7 +65,7 @@ img {
 }
 
 .features-container  {
-    background-color: lightgray;
+    background-color:rgba(200, 219, 253);
     padding-top: 3rem;
     padding-bottom: 3rem;
 }
@@ -97,8 +98,8 @@ img {
 }
 
 .footer{
-    color: lightgray;
-    background-color: rgb(61, 61, 61);
+    color: white;
+    background-color: rgb(53, 66, 94);
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
