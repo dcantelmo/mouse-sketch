@@ -1,13 +1,13 @@
 <template>
     <div class="page">
         <div class="img-wrapper">
-            <img src="../assets/404.png" />
+            <img src="../assets/Error.png" />
         </div>
         <div>
-            <h1>Ops! Pagina non trovata</h1>
-            <h3>Forse hai aperto la finestra sbagliata</h3>
+            <h1>Ops! Nessuna connessione</h1>
+            <h3>Connetti il dispositivo ad internet e riprova</h3>
         </div>
-        <router-link to="/" class="tornaHome">Torna alla Home</router-link>
+        <router-link to="/" class="tornaHome">Home</router-link>
     </div>
 </template>
 
@@ -33,8 +33,8 @@ img div {
     text-align: center;
 }
 img {
-    width: auto;
-    height: 100%;
+    width: 100%;
+    height: auto;
 }
 h1 {
     font-size: 48px;
