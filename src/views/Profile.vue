@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isLoading" class="page">
+    <div class="page">
         <div class="row card-container">
             <div class="col-5 profile-container">
                 <div class="profile-picture">
@@ -36,20 +36,14 @@ import { mapState } from 'vuex';
 import EventService from '@/services/EventService.js';
 
 export default {
-    data() {
-        return {
-            localUser: null,
-            isLoading: true
-        };
+    props: {
+        localUser: {
+            type: Object,
+            required: true,
+        }
     },
     created() {
         console.log(this.$route.params.user);
-        EventService.getUserProfile(this.$route.params.user).then(
-            ({ data }) => {
-                this.localUser = data;
-                this.isLoading = false;
-            }
-        );
     },
     computed: {
         ...mapState(['user']),
