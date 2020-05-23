@@ -1,11 +1,12 @@
 <template>
-    <nav class="navbar">
-        <router-link to="/" class="navbar-brand navbar-link">Home</router-link>
-        <router-link v-if="!loggedIn" to="/login" class="navbar-brand navbar-link">Login</router-link>
-        <router-link v-if="!loggedIn" to="/register" class="navbar-brand register-btn">Registrati</router-link>
-        <router-link v-if="loggedIn" to="/Draw" class="navbar-brand navbar-link">Disegna</router-link>
+    <nav class="navbar navbar-expand-sm">
+        <router-link to="/" :class="this.$route.name == 'Home'? 'selected' : ''" class="navbar-brand navbar-link">Home</router-link>
+        <router-link v-if="!loggedIn" to="/login" :class="this.$route.name == 'login'? 'selected' : ''" class="navbar-brand navbar-link">Login</router-link>
+        <router-link v-if="!loggedIn" to="/register" :class="this.$route.name == 'register'? 'selected' : ''" class="navbar-brand register-btn">Registrati</router-link>
+        <router-link v-if="loggedIn" to="/Draw" :class="this.$route.name == 'draw'? 'selected' : ''" class="navbar-brand navbar-link">Disegna</router-link>
         <router-link
             v-if="loggedIn"
+            :class="this.$route.name == 'gallery'? 'selected' : ''"
             :to="{name: 'gallery', params: {user: user.nickname}}"
             class="navbar-brand navbar-link"
         >Galleria</router-link>
@@ -15,6 +16,7 @@
         <router-link
             v-if="loggedIn"
             :to="{name: 'profile', params: {user: user.nickname}}"
+            :class="this.$route.name == 'profile'? 'selected' : ''"
             class="navbar-brand navbar-link"
         >Profilo</router-link>
         <button v-if="loggedIn" @click="logout" class="navbar-brand register-btn">Logout</button>
@@ -49,7 +51,6 @@ export default {
 }
 
 .navbar {
-    height: 85px;
     background-color: rgb(53, 66, 94);
     justify-content: left;
 }
@@ -73,6 +74,11 @@ export default {
     transform: scaleX(1.025);
 }
 
+.selected.navbar-link:after {
+    transform: scaleX(1.025);
+    border-color: rgb(200, 219, 253);
+}
+
 .register-btn {
     background-color: rgb(53, 66, 94);
     display: inline-block;
@@ -85,7 +91,13 @@ export default {
 }
 
 .register-btn:hover {
-    background-color: rgba(200, 219, 253);
+    background-color: rgb(200, 219, 253);
+    color: rgb(53, 66, 94);
+    border-color: rgb(200, 219, 253);
+}
+
+.selected.register-btn {
+    background-color: rgb(200, 219, 253);
     color: rgb(53, 66, 94);
     border-color: rgb(200, 219, 253);
 }

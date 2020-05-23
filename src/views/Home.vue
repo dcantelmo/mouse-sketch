@@ -2,7 +2,7 @@
     <div class="container-fluid" style="padding: 0px">
         <section class="top-container container-fluid" style="padding: 0px">
             <div class="img-wrapper">
-                <img src="../assets/Mouse2.png" alt="">
+                <img src="../assets/Mouse.png" alt />
             </div>
         </section>
         <section class="container-fluid features-container">
@@ -10,26 +10,38 @@
                 <div class="col margin-bottom">
                     <div class="card-box">
                         <h4>Single Page Application</h4>
-                        <p>Una single page application <b>(SPA)</b>, è un'applicazione web che interagisce con il browser e <b>renderizza</b> dinamicamente
+                        <p>
+                            Una single page application
+                            <b>(SPA)</b>, è un'applicazione web che interagisce con il browser e
+                            <b>renderizza</b> dinamicamente
                             le pagine web con eventuali nuovi dati forniti dal web server, a differenza del metodo standard che prevede il caricamento
-                            di una nuova pagina web, garantendo traniszioni piu' <b>veloci</b> durante la navigazione e l'utilizzo del sito
+                            di una nuova pagina web, garantendo traniszioni piu'
+                            <b>veloci</b> durante la navigazione e l'utilizzo del sito
                         </p>
                     </div>
                 </div>
                 <div class="col margin-bottom">
                     <div class="card-box">
                         <h4>Disegna su una "tela"</h4>
-                        <p>La funzione principale di questa applicazione è il disegno libero sul tag <b>Canvas</b> di HTML. E' basata sulla gestione degli eventi
-                        in javascript e il rendering di piccole linee seguendo il movimento del mouse sulla tela, inoltre utilizza la componentistica di <b>VueJS</b> per
-                        lo storage delle informazioni relative alla grandezza del tratto da disegnare, il colore e i tratti disegnati sulla tela</p>
+                        <p>
+                            La funzione principale di questa applicazione è il disegno libero sul tag
+                            <b>Canvas</b> di HTML. E' basata sulla gestione degli eventi
+                            in javascript e il rendering di piccole linee seguendo il movimento del mouse sulla tela, inoltre utilizza la componentistica di
+                            <b>VueJS</b> per
+                            lo storage delle informazioni relative alla grandezza del tratto da disegnare, il colore e i tratti disegnati sulla tela
+                        </p>
                     </div>
                 </div>
                 <div class="col margin-bottom">
                     <div class="card-box">
                         <h4>Salva i tuoi disegni</h4>
-                        <p>Dopo aver effettuato la <b>registrazione</b>, è possibile salvare nel profilo i propri disegni, attribuire loro un nome, e metterli in mostra nella
-                        propria bacheca per condividerli con le altre persone. Per implementare questa funzionalità, è stato utilizzato un server basato su Node (ExpressJS) ed
-                        database relazionale <b>SQLite</b></p>
+                        <p>
+                            Dopo aver effettuato la
+                            <b>registrazione</b>, è possibile salvare nel profilo i propri disegni, attribuire loro un nome, e metterli in mostra nella
+                            propria bacheca per condividerli con le altre persone. Per implementare questa funzionalità, è stato utilizzato un server basato su Node (ExpressJS) ed
+                            database relazionale
+                            <b>SQLite</b>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -41,13 +53,15 @@
 </template>
 
 <script>
-    export default {
-        
+export default {
+    created(){
+        console.log(this.$route);
     }
+};
 </script>
 
 <style scoped>
-.img-wrapper{
+.img-wrapper {
     display: flex;
     height: 500px;
     justify-content: center;
@@ -57,28 +71,24 @@
 
 img {
     position: relative;
-    width: 100%; 
+    width: auto;
     height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    background-color:rgb(200, 219, 253);
 }
 
-.features-container  {
-    background-color: rgb(200, 219, 253);
+.features-container {
     padding-top: 3rem;
     padding-bottom: 3rem;
 }
 
-.card-box{
+.card-box {
     display: flex;
     align-items: center;
     flex-direction: column;
     padding: 1rem 1rem;
     background-color: white;
-    -webkit-box-shadow: 4px 4px 2px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 4px 4px 2px 0px rgba(0,0,0,0.75);
-    box-shadow: 3px 3px 6px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 4px 4px 2px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 4px 4px 2px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.75);
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -97,10 +107,17 @@ img {
     margin-right: 10%;
 }
 
-.footer{
+.footer {
     color: white;
     background-color: rgb(53, 66, 94);
     padding-top: 2rem;
     padding-bottom: 2rem;
+}
+
+@media screen and (max-width: 700px) {
+    img {
+        width: 95%;
+        height: auto;
+    }
 }
 </style>
