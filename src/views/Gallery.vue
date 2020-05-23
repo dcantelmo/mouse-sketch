@@ -31,6 +31,12 @@ import EventService from '@/services/EventService.js';
 import ImageBox from '@/components/ImageBox.vue';
 
 export default {
+    props: {
+        response: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             urls: [],
@@ -44,7 +50,12 @@ export default {
         ImageBox
     },
     created() {
-        this.getGallery();
+        this.response.data.forEach(element => {
+            this.urls.push({
+                path: EventService.baseURL + element.path.substr(1),
+                name: element.name
+            });
+        });
     },
     beforeRouteLeave(to, from, next) {
         this.urls = [];
@@ -98,21 +109,6 @@ export default {
         }
     },
     methods: {
-        getGallery() {
-            EventService.getImagesURL(this.$route.params['user'])
-                .then(response => {
-                    this.urls = [];
-                    response.data.forEach(element => {
-                        this.urls.push({
-                            path: EventService.baseURL + element.path.substr(1),
-                            name: element.name
-                        });
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        },
         rename() {
             this.lastTooltip.addEventListener('blur', event => {
                 event.target.contentEditable = 'false';

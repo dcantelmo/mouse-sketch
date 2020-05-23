@@ -6,6 +6,8 @@ import UserRegister from "../views/UserRegister.vue";
 import UserLogin from '../views/UserLogin.vue';
 import Profile from "../views/Profile.vue";
 import Gallery from "../views/Gallery.vue";
+import NotFound from "../views/NotFound.vue";
+import EventService from "@/services/EventService.js";
 
 Vue.use(VueRouter);
 
@@ -35,13 +37,50 @@ const routes = [
         path: '/profile/:user',
         name: 'profile',
         component: Profile,
-        meta: { requiresAuth: true}
+        meta: { requiresAuth: true },
+        props: true,
+        beforeEnter(routeTo, routeFrom, next) {
+            EventService.getUserProfile(routeTo.params.user).then(
+                ({ data }) => {
+                    routeTo.params.localUser = data;
+                    console.log("hooo");
+                    next();
+                }
+            ).catch(error => {
+                if (error.response && error.response.status == 404) {
+                    next({ name: "404" });
+                }
+            });
+        }
     },
     {
         path: '/profile/:user/gallery',
         name: 'gallery',
         component: Gallery,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true },
+        props: true,
+        beforeEnter(routeTo, routeFrom, next) {
+            EventService.getImagesURL(routeTo.params.user).then(
+                (response) => {
+                    console.log(response);
+                    routeTo.params.response = response;
+                    next();
+                }
+            ).catch(error => {
+                if (error.response && error.response.status == 404) {
+                    next({ name: "404" });
+                }
+            });
+        }
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: NotFound
+    },
+    {
+        path: '*',
+        redirect: {name: 404}
     }
 ];
 
