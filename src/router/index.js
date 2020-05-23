@@ -1,13 +1,14 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Draw from "../views/Draw.vue";
-import UserRegister from "../views/UserRegister.vue";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
+import Draw from '../views/Draw.vue';
+import UserRegister from '../views/UserRegister.vue';
 import UserLogin from '../views/UserLogin.vue';
-import Profile from "../views/Profile.vue";
-import Gallery from "../views/Gallery.vue";
-import NotFound from "../views/NotFound.vue";
-import EventService from "@/services/EventService.js";
+import Profile from '../views/Profile.vue';
+import Gallery from '../views/Gallery.vue';
+import NotFound from '../views/NotFound.vue';
+import NetworkIssue from '../views/NetworkIssue.vue';
+import EventService from '@/services/EventService.js';
 
 Vue.use(VueRouter);
 
@@ -21,7 +22,7 @@ const routes = [
         path: '/draw',
         name: 'draw',
         component: Draw,
-        meta: { requiresAuth: true}
+        meta: { requiresAuth: true }
     },
     {
         path: '/register',
@@ -40,17 +41,17 @@ const routes = [
         meta: { requiresAuth: true },
         props: true,
         beforeEnter(routeTo, routeFrom, next) {
-            EventService.getUserProfile(routeTo.params.user).then(
-                ({ data }) => {
+            EventService.getUserProfile(routeTo.params.user)
+                .then(({ data }) => {
                     routeTo.params.localUser = data;
-                    console.log("hooo");
+                    console.log('hooo');
                     next();
-                }
-            ).catch(error => {
-                if (error.response && error.response.status == 404) {
-                    next({ name: "404" });
-                }
-            });
+                })
+                .catch(error => {
+                    if (error.response && error.response.status == 404) {
+                        next({ name: '404' });
+                    }
+                });
         }
     },
     {
@@ -60,17 +61,17 @@ const routes = [
         meta: { requiresAuth: true },
         props: true,
         beforeEnter(routeTo, routeFrom, next) {
-            EventService.getImagesURL(routeTo.params.user).then(
-                (response) => {
+            EventService.getImagesURL(routeTo.params.user)
+                .then(response => {
                     console.log(response);
                     routeTo.params.response = response;
                     next();
-                }
-            ).catch(error => {
-                if (error.response && error.response.status == 404) {
-                    next({ name: "404" });
-                }
-            });
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status == 404) next({ name: '404' });
+                    } else next({ name: 'network-issue' });
+                });
         }
     },
     {
@@ -79,23 +80,28 @@ const routes = [
         component: NotFound
     },
     {
+        path: '/network-issue',
+        name: 'network-issue',
+        component: NetworkIssue
+    },
+    {
         path: '*',
-        redirect: {name: 404}
+        redirect: { name: 404 }
     }
 ];
 
 const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes,
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 });
 
 router.beforeEach((to, from, next) => {
-    const loggedIn = localStorage.getItem('user')
+    const loggedIn = localStorage.getItem('user');
     if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
-        next('/')
+        next('/');
     }
-    next()
-})
+    next();
+});
 
 export default router;

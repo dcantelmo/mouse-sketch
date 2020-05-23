@@ -50,6 +50,9 @@ export default {
                     this.$router.push({name: 'Home'})
                 })
                 .catch(err => {
+                    if(!err.response){
+                        this.$router.push({name: 'network-issue'})
+                    }
                     this.errors = err.response.data.errors;
                 });
         }

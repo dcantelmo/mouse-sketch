@@ -31,7 +31,11 @@ export default {
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
-                    this.errors = err.response.data.errors;
+                    if(!err.response){
+                        this.$router.push({name: 'network-issue'})
+                    }
+                    else
+                        this.errors = err.response.data.errors;
                 });
         }
     }
