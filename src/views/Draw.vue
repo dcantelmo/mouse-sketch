@@ -3,8 +3,9 @@
         <div class="row">
             <div class="col canvas-container">
                 <div class="row toolbar">
-                    <input type="text" name="title" v-model="title" autocomplete="false" />
-                    <button @click="saveImage()">Save</button>
+                    <button @click="setOperation()">{{operation}}</button>
+                    <input class="input-title" type="text" v-model="title" />
+                    <button @click="saveImage()">Salva</button>
                 </div>
                 <canvas
                     ref="canvas"
@@ -14,10 +15,10 @@
                     :height="width"
                 ></canvas>
                 <div class="row toolbar">
-                    <div class="col-1 trash">
-                        <button @click="clear()">Erase</button>
+                    <div class="col-2 trash">
+                        <button @click="clear()">Elimina</button>
                     </div>
-                    <div class="col-10 color-panel">
+                    <div class="col-8 color-panel">
                         <div class="row first-row">
                             <div id="red" class="col color-box red"></div>
                             <div id="yellow" class="col color-box yellow"></div>
@@ -35,8 +36,8 @@
                             <div id="white" class="col color-box white"></div>
                         </div>
                     </div>
-                    <div class="col-1 undo">
-                        <button @click="redraw()">Undo</button>
+                    <div class="col-2 undo">
+                        <button @click="redraw()">Indietro</button>
                     </div>
                 </div>
             </div>
@@ -205,6 +206,17 @@ export default {
             this.lastStrokeHistory = [0];
             this.history = [];
         },
+        setOperation() {
+            if(this.currentOperation == 'source-over'){
+                this.currentOperation = 'destination-out';
+                this.context.globalCompositeOperation = this.currentOperation;
+            }
+            else {
+                this.currentOperation = 'source-over';
+                this.context.globalCompositeOperation = this.currentOperation;
+            }
+
+        },
         saveImage() {
             /*  Per sfondo BIANCO => defualt: trasparente
                 let myData = this.context.getImageData(
@@ -234,8 +246,14 @@ export default {
             EventService.saveToGallery(bodyFormData)
                 .then(res => {
                     console.log(res);
+                    alert('Immagine salvata');
                 })
                 .catch(err => console.log(err));
+        }
+    },
+    computed: {
+        operation() {
+            return this.currentOperation == 'source-over' ? 'Gomma' : 'Penna';
         }
     }
 };
@@ -253,6 +271,7 @@ export default {
 }
 .toolbar {
     margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     padding: 0.5rem;
     background-color: rgba(255, 255, 255, 0.75);
     border-radius: 5px;
@@ -284,6 +303,7 @@ button {
     user-select: none;
     border-radius: 5px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+    cursor: url('../assets/myCursor.svg') 16 16, auto;
 }
 /* COLOR BOXES */
 .color-box {
