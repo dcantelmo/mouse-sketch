@@ -11,9 +11,6 @@
                     <div class="nick-box">
                         <p>{{localUser.nickname}}</p>
                     </div>
-                    <div class="draw-box">
-                        <p>Numero disegni: {{localUser.drawings}}</p>
-                    </div>
                 </div>
             </div>
             <div class="col-7 option-container">
@@ -39,7 +36,7 @@ export default {
     props: {
         localUser: {
             type: Object,
-            required: true,
+            required: true
         }
     },
     created() {
@@ -70,6 +67,7 @@ export default {
 img {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
 }
 
 p {
@@ -100,16 +98,16 @@ a {
 .profile-picture {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: lightgray 1px solid;
+    border-bottom: solid rgb(200, 219, 253) 2px;
 }
 
 .img-wrapper {
     width: 70%;
     height: auto;
     margin: auto;
-    padding: 8px;
+    padding: 3px;
     background-color: white;
-    border: solid lightgray 1px;
+    border: solid rgb(200, 219, 253) 3px;
     border-radius: 50%;
 }
 
@@ -119,6 +117,19 @@ a {
     align-items: center;
     font-size: 25px;
     color: rgba(53, 66, 94, 0.75);
+}
+
+.nick-box {
+    width: 80%;
+    margin: 2rem;
+    padding: 2rem;
+    border: solid rgb(200, 219, 253) 3px;
+    font-size: 5vw;
+    font-weight: 500;
+}
+.nick-box > p{
+    margin: 0;
+   
 }
 
 .option-container {

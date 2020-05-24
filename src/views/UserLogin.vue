@@ -31,6 +31,13 @@ export default {
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
+                    const notification =  {
+                        type: 'error',
+                        message: 'Problema con il login' + err.response.data.errors
+                    }
+                    this.$store
+                .dispatch('notification/add', notification, {root: true});
+
                     if(!err.response){
                         this.$router.push({name: 'network-issue'})
                     }

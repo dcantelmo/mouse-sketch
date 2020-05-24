@@ -44,7 +44,6 @@ const routes = [
             EventService.getUserProfile(routeTo.params.user)
                 .then(({ data }) => {
                     routeTo.params.localUser = data;
-                    console.log('hooo');
                     next();
                 })
                 .catch(error => {

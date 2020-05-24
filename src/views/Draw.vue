@@ -3,11 +3,19 @@
         <div class="row">
             <div class="col canvas-container">
                 <div class="row toolbar">
-                    <button @click="setOperation()">{{operation}}</button>
-                    <input class="input-title" type="text" v-model="title" />
+                    <img class="selector" :src="widthSelector" alt />
+                    <button class="operation-btn" @click="setOperation()">{{operation}}</button>
+                    <input
+                        class="input-title"
+                        type="text"
+                        v-model="title"
+                        spellcheck="false"
+                        placeholder="Inserisci un titolo..."
+                    />
                     <button @click="saveImage()">Salva</button>
                 </div>
                 <canvas
+                    v-bind:style="{cursor: selectedCursor}"
                     ref="canvas"
                     id="vueCanvas"
                     class="canvas cursor"
@@ -20,20 +28,68 @@
                     </div>
                     <div class="col-8 color-panel">
                         <div class="row first-row">
-                            <div id="red" class="col color-box red"></div>
-                            <div id="yellow" class="col color-box yellow"></div>
-                            <div id="green" class="col color-box green"></div>
-                            <div id="brown" class="col color-box brown"></div>
-                            <div id="blue" class="col color-box blue"></div>
-                            <div id="black" class="col color-box black"></div>
+                            <div
+                                id="red"
+                                :class="activeBtn == 'red'? 'selected' : ''"
+                                class="col color-box red"
+                            ></div>
+                            <div
+                                id="yellow"
+                                :class="activeBtn == 'yellow'? 'selected' : ''"
+                                class="col color-box yellow"
+                            ></div>
+                            <div
+                                id="green"
+                                :class="activeBtn == 'green'? 'selected' : ''"
+                                class="col color-box green"
+                            ></div>
+                            <div
+                                id="brown"
+                                :class="activeBtn == 'brown'? 'selected' : ''"
+                                class="col color-box brown"
+                            ></div>
+                            <div
+                                id="blue"
+                                :class="activeBtn == 'blue'? 'selected' : ''"
+                                class="col color-box blue"
+                            ></div>
+                            <div
+                                id="black"
+                                :class="activeBtn == 'black'? 'selected' : ''"
+                                class="col color-box black"
+                            ></div>
                         </div>
                         <div class="row second-row">
-                            <div id="orange" class="col color-box orange"></div>
-                            <div id="purple" class="col color-box purple"></div>
-                            <div id="greenyellow" class="col color-box greenyellow"></div>
-                            <div id="beige" class="col color-box beige"></div>
-                            <div id="turquoise" class="col color-box turquoise"></div>
-                            <div id="white" class="col color-box white"></div>
+                            <div
+                                id="orange"
+                                :class="activeBtn == 'orange'? 'selected' : ''"
+                                class="col color-box orange"
+                            ></div>
+                            <div
+                                id="purple"
+                                :class="activeBtn == 'purple'? 'selected' : ''"
+                                class="col color-box purple"
+                            ></div>
+                            <div
+                                id="greenyellow"
+                                :class="activeBtn == 'greenyellow'? 'selected' : ''"
+                                class="col color-box greenyellow"
+                            ></div>
+                            <div
+                                id="beige"
+                                :class="activeBtn == 'beige'? 'selected' : ''"
+                                class="col color-box beige"
+                            ></div>
+                            <div
+                                id="turquoise"
+                                :class="activeBtn == 'turquoise'? 'selected' : ''"
+                                class="col color-box turquoise"
+                            ></div>
+                            <div
+                                id="white"
+                                :class="activeBtn == 'white'? 'selected' : ''"
+                                class="col color-box white"
+                            ></div>
                         </div>
                     </div>
                     <div class="col-2 undo">
@@ -50,9 +106,11 @@ import EventService from '@/services/EventService.js';
 export default {
     data() {
         return {
+            activeBtn: '',
+            lastScroll: '',
             width: 600,
             height: 600,
-            title: 'immagine',
+            title: '',
             context: null,
             isDrawing: false,
             history: [],
@@ -124,7 +182,6 @@ export default {
             //Canvas//
             this.$refs.canvas.addEventListener('mousedown', event => {
                 if (window.getSelection().focusNode != null) {
-                    console.log(window.getSelection());
                     window.getSelection().removeAllRanges();
                 }
                 if (!this.isDrawing) {
@@ -146,6 +203,20 @@ export default {
                 }
                 console.log('up: ' + this.isDrawing);
             });
+            this.$refs.canvas.addEventListener('wheel', e => {
+                e.preventDefault();
+                console.log(e.deltaY);
+                if (e.deltaY <= -1) {
+                    if (this.lineWidth < 28) {
+                        this.lineWidth += 2;
+                        this.context.lineWidth = this.lineWidth;
+                    }
+                } else if (e.deltaY >= 1)
+                    if (this.lineWidth > 4) {
+                        this.context.lineWidth = this.lineWidth;
+                        this.lineWidth -= 2;
+                    }
+            });
             this.$refs.canvas.addEventListener('mouseout', () => {
                 if (this.isDrawing) {
                     this.isDrawing = false;
@@ -159,7 +230,6 @@ export default {
             });
         },
         draw(event) {
-            console.log('move: ' + this.isDrawing);
             if (!this.isDrawing) return;
             else {
                 this.context.beginPath();
@@ -173,6 +243,7 @@ export default {
         },
         setColor(event) {
             this.selectedColor = this.availableColors[event.target.id];
+            this.activeBtn = event.target.id;
             if (this.selectedColor == undefined)
                 this.context.strokeStyle = this.selectedColor = '#000000';
             else this.context.strokeStyle = this.selectedColor;
@@ -207,15 +278,13 @@ export default {
             this.history = [];
         },
         setOperation() {
-            if(this.currentOperation == 'source-over'){
+            if (this.currentOperation == 'source-over') {
                 this.currentOperation = 'destination-out';
                 this.context.globalCompositeOperation = this.currentOperation;
-            }
-            else {
+            } else {
                 this.currentOperation = 'source-over';
                 this.context.globalCompositeOperation = this.currentOperation;
             }
-
         },
         saveImage() {
             /*  Per sfondo BIANCO => defualt: trasparente
@@ -235,6 +304,7 @@ export default {
                 }
             }
             this.context.putImageData(myData, 0, 0);*/
+            if (!this.title) return;
             this.$refs.canvas.toBlob(blob => {
                 this.sendForm(blob);
             });
@@ -246,7 +316,12 @@ export default {
             EventService.saveToGallery(bodyFormData)
                 .then(res => {
                     console.log(res);
-                    alert('Immagine salvata');
+                    const notification =  {
+                        type: 'success',
+                        message: res.data
+                    }
+                    this.$store
+                .dispatch('notification/add', notification, {root: true});
                 })
                 .catch(err => console.log(err));
         }
@@ -254,12 +329,39 @@ export default {
     computed: {
         operation() {
             return this.currentOperation == 'source-over' ? 'Gomma' : 'Penna';
+        },
+        selectedCursor() {
+            return `url("data:image/svg+xml,%3Csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cellipse opacity='${
+                this.isDrawing ? '1' : '0.3'
+            }' stroke='%23000' ry='15' rx='15' id='svg_2' cy='16' cx='16' stroke-opacity='null' stroke-width='2' fill='none'/%3E%3Cellipse ry='${this
+                .lineWidth / 2}' rx='${this.lineWidth /
+                2}' id='svg_3' cy='16' cx='16' opacity='${
+                this.isDrawing ? '1' : '0.3'
+            }' stroke-width='1.5' stroke='%23000' fill='none'/%3E%3C/g%3E%3C/svg%3E") 15 16, pointer`;
+        },
+        fillSelector() {
+            if (this.currentOperation == 'source-over')
+                return `%23${this.selectedColor.substring(1)}`;
+            else return 'none';
+        },
+
+        widthSelector() {
+            return `data:image/svg+xml,%3Csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cellipse opacity='1' stroke='%23000' ry='15' rx='15' id='svg_2' cy='16' cx='16' stroke-opacity='null' stroke-width='2' fill='none'/%3E%3Cellipse ry='${this
+                .lineWidth / 2}' rx='${this.lineWidth /
+                2}' id='svg_3' cy='16' cx='16' stroke-opacity='null' stroke-width='1.5' stroke='%23000' fill='${
+                this.fillSelector
+            }'/%3E%3C/g%3E%3C/svg%3E`;
         }
     }
 };
 </script>
 
 <style scoped>
+.selector {
+    width: 32px;
+    height: 32px;
+}
+
 .row {
     margin: 0;
 }
@@ -278,12 +380,48 @@ export default {
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
 button {
-    border-radius: 5px;
+    color: rgb(215, 226, 245);
+    font-weight: 600;
+    border-radius: 8px;
     background-color: rgb(200, 219, 253);
-    color: rgb(53, 66, 94);
+    color: rgb(59, 130, 253);
     border-color: rgb(200, 219, 253);
-    margin: 2px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    transition: 0.25s;
 }
+button:hover {
+    color: rgb(200, 219, 253);
+    background-color: rgb(59, 130, 253);
+}
+
+.input-title {
+    text-align: center;
+    font-weight: 500;
+    color: rgb(87, 128, 201);
+    caret-color: rgb(59, 130, 253);
+    outline: none;
+    background: transparent;
+    border: none;
+    padding-bottom: -3px;
+    transition: 0.25s ease-in;
+}
+
+.input-title:focus {
+    border-bottom: 3px solid rgba(120, 170, 255, 0.664);
+    text-align: left;
+}
+.input-title::selection {
+    background: rgb(200, 219, 253);
+}
+.input-title::placeholder {
+    color: rgb(134, 176, 250);
+}
+
+.operation-btn {
+    width: 75px;
+}
+
 .user-container {
     display: flex;
 }
@@ -303,18 +441,27 @@ button {
     user-select: none;
     border-radius: 5px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
-    cursor: url('../assets/myCursor.svg') 16 16, auto;
 }
+
 /* COLOR BOXES */
 .color-box {
     width: 60px;
     height: 35px;
-    margin-top: 4px;
-    margin-left: 4px;
+    margin: 0.25rem;
     cursor: pointer;
     border-radius: 25px;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+    transition: 75ms ease-out;
+    border: 4px solid transparent;
 }
+.color-box:hover {
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.4);
+    transform: scale(1.075);
+}
+.color-box:active {
+    transform: scale(0.9);
+}
+
 .red {
     background-color: #ff0000;
 }
@@ -355,6 +502,8 @@ button {
     border: solid 2px lightgray;
 }
 .selected {
-    border: 4px solid lightsalmon;
+    border: 4px solid rgb(154, 191, 255);
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.644);
+    transform: scale(1.075);
 }
 </style>

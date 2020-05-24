@@ -2,25 +2,9 @@
     <div class="register-view">
         <form class="register-card" @submit.prevent="register">
             <h2>Register</h2>
-            <input
-                v-model="user.name"
-                id="name"
-                type="text"
-                placeholder="Nome"
-                autocomplete="none"
-            />
-            <input
-                v-model="user.mail"
-                id="mail"
-                type="email"
-                placeholder="Email"
-            />
-            <input
-                v-model="user.psw"
-                id="psw"
-                type="password"
-                placeholder="Password"
-            />
+            <input v-model="user.name" id="name" type="text" placeholder="Nome" autocomplete="none" />
+            <input v-model="user.mail" id="mail" type="email" placeholder="Email" />
+            <input v-model="user.psw" id="psw" type="password" placeholder="Password" />
             <button class="btn button" type="submit">Invio</button>
         </form>
     </div>
@@ -47,11 +31,19 @@ export default {
                     password: this.user.psw
                 })
                 .then(() => {
-                    this.$router.push({name: 'Home'})
+                    this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
-                    if(!err.response){
-                        this.$router.push({name: 'network-issue'})
+                    const notification = {
+                        type: 'error',
+                        message:
+                            'Problema con la registrazione' + err.response.data.errors
+                    };
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true
+                    });
+                    if (!err.response) {
+                        this.$router.push({ name: 'network-issue' });
                     }
                     this.errors = err.response.data.errors;
                 });
@@ -91,7 +83,7 @@ input {
     margin-top: 20px;
 }
 .button:hover {
-    background-color:rgba(200,219,253);
+    background-color: rgba(200, 219, 253);
     color: rgb(70, 70, 70);
     border-color: rgb(200, 219, 253);
 }

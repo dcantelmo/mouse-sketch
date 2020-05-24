@@ -3,15 +3,17 @@
         <div class="gallery-card">
             <div class="gallery-scroll overflow-auto">
                 <h1 v-if="urls == ''">La galleria è vuota! Comincia a disegnare :)</h1>
-                <ImageBox
-                    :id="image.name"
-                    :class="clicked == image.name ? 'active': ''"
-                    class="imageBox"
-                    v-for="image in urls"
-                    :img_src="image.path"
-                    :key="image.name"
-                    :tooltip="image.name"
-                />
+                
+                    <ImageBox
+                        :id="image.name"
+                        :class="clicked == image.name ? 'active': ''"
+                        class="imageBox"
+                        v-for="image in urls"
+                        :img_src="image.path"
+                        :key="image.name"
+                        :tooltip="image.name"
+                    />
+        
             </div>
         </div>
         <div class="menu" ref="customMenu">
@@ -168,9 +170,24 @@ export default {
             };
             EventService.galleryOptions(data, this.$route.params.user).then(
                 response => {
-                    console.log(response);
+                    const notification = {
+                        type: 'error',
+                        message: response.data
+                    };
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true
+                    });
                 }
-            );
+            ).catch((err) => {
+                const notification = {
+                        type: 'error',
+                        message: 'Cambio di avatar non riuscito'
+                    };
+                    console.log(err);
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true
+                    });
+            });
         }
         //AUXILIARY ONLY
     }
