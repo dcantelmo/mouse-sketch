@@ -2,9 +2,29 @@
     <div class="register-view">
         <form class="register-card" @submit.prevent="register">
             <h2>Register</h2>
-            <input v-model="user.name" id="name" type="text" placeholder="Nome" autocomplete="none" />
-            <input v-model="user.mail" id="mail" type="email" placeholder="Email" />
-            <input v-model="user.psw" id="psw" type="password" placeholder="Password" />
+            <input
+                @input="clearErr"
+                v-model="user.name"
+                id="name"
+                type="text"
+                placeholder="Nome"
+                autocomplete="none"
+            />
+            <input
+                @input="clearErr"
+                v-model="user.mail"
+                id="mail"
+                type="email"
+                placeholder="Email"
+            />
+            <input
+                @input="clearErr"
+                v-model="user.psw"
+                id="psw"
+                type="password"
+                placeholder="Password"
+            />
+            <p v-if="error" class="error-container">{{error}}</p>
             <button class="btn button" type="submit">Invio</button>
         </form>
     </div>
@@ -18,7 +38,8 @@ export default {
                 name: '',
                 mail: '',
                 psw: ''
-            }
+            },
+            error: ''
         };
     },
     methods: {
@@ -34,10 +55,12 @@ export default {
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
+                    this.error = err.response.data
+                    console.log(this.errors);
                     const notification = {
                         type: 'error',
                         message:
-                            'Problema con la registrazione' + err.response.data.errors
+                            'Problema con la registrazione '
                     };
                     this.$store.dispatch('notification/add', notification, {
                         root: true
@@ -45,25 +68,36 @@ export default {
                     if (!err.response) {
                         this.$router.push({ name: 'network-issue' });
                     }
-                    this.errors = err.response.data.errors;
                 });
+        },
+        clearErr() {
+            if (this.error) 
+                this.error = '';
+        },
+        createFreshObject() {
+            this.user.name = '';
+            this.user.psw = '';
+            this.user.mail = '';
         }
     }
 };
 </script>
 
 <style scoped>
+.register-view {
+    height: calc(100vh - 85px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .register-view .register-card {
     max-width: 320px;
     width: 90%;
     background-color: rgba(53, 66, 94, 0.95);
     padding: 40px;
     border-radius: 4px;
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    color: #fff;
+    color: rgb(255, 255, 255);
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -75,6 +109,13 @@ input {
     border: none;
     border-bottom: 3px solid rgba(212, 212, 212, 0.6);
     border-radius: 2px 2px 2px 2px;
+    outline: none;
+}
+
+.error-container {
+    color: rgb(211, 116, 116);
+    margin-bottom: 0;
+    margin: .5em;
 }
 
 .button {

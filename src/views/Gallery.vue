@@ -3,17 +3,15 @@
         <div class="gallery-card">
             <div class="gallery-scroll overflow-auto">
                 <h1 v-if="urls == ''">La galleria è vuota! Comincia a disegnare :)</h1>
-                
-                    <ImageBox
-                        :id="image.name"
-                        :class="clicked == image.name ? 'active': ''"
-                        class="imageBox"
-                        v-for="image in urls"
-                        :img_src="image.path"
-                        :key="image.name"
-                        :tooltip="image.name"
-                    />
-        
+                <ImageBox
+                    :id="image.name"
+                    :class="clicked == image.name ? 'active': ''"
+                    class="imageBox"
+                    v-for="image in urls"
+                    :img_src="image.path"
+                    :key="image.name"
+                    :tooltip="image.name"
+                />
             </div>
         </div>
         <div class="menu" ref="customMenu">
@@ -52,6 +50,7 @@ export default {
         ImageBox
     },
     created() {
+        this.urls = [];
         this.response.data.forEach(element => {
             this.urls.push({
                 path: EventService.baseURL + element.path.substr(1),
@@ -59,9 +58,18 @@ export default {
             });
         });
     },
-    beforeRouteLeave(to, from, next) {
-        this.urls = [];
-        next();
+    beforeRouteUpdate(routeTo, routeFrom, next) {
+            EventService.getImagesURL(routeTo.params.user)
+                .then(response => {
+                    console.log(response);
+                    routeTo.params.response = response;
+                    next();
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status == 404) next({ name: '404' });
+                    } else next({ name: 'network-issue' });
+                });
     },
     mounted() {
         //Se l'utente è il proprietario della gallery, monta il context menù per interagire con i disegni (i controlli vanno effettuati anche lato server)
@@ -168,18 +176,18 @@ export default {
                 title: this.lastClicked,
                 author: this.$route.params.user
             };
-            EventService.galleryOptions(data, this.$route.params.user).then(
-                response => {
+            EventService.galleryOptions(data, this.$route.params.user)
+                .then(response => {
                     const notification = {
-                        type: 'error',
+                        type: 'success',
                         message: response.data
                     };
                     this.$store.dispatch('notification/add', notification, {
                         root: true
                     });
-                }
-            ).catch((err) => {
-                const notification = {
+                })
+                .catch(err => {
+                    const notification = {
                         type: 'error',
                         message: 'Cambio di avatar non riuscito'
                     };
@@ -187,7 +195,7 @@ export default {
                     this.$store.dispatch('notification/add', notification, {
                         root: true
                     });
-            });
+                });
         }
         //AUXILIARY ONLY
     }
@@ -214,7 +222,7 @@ h1 {
     background-color: rgba(255, 255, 255, 0.9);
     width: 60%;
     height: 90%;
-    min-width: 240px;
+    min-width: 300px;
     padding: 1rem;
     -webkit-box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);

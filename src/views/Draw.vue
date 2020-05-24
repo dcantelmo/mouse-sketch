@@ -5,14 +5,17 @@
                 <div class="row toolbar">
                     <img class="selector" :src="widthSelector" alt />
                     <button class="operation-btn" @click="setOperation()">{{operation}}</button>
-                    <input
-                        class="input-title"
-                        type="text"
-                        v-model="title"
-                        spellcheck="false"
-                        placeholder="Inserisci un titolo..."
-                    />
-                    <button @click="saveImage()">Salva</button>
+                    <form @submit.prevent="saveImage">
+                        <input
+                            class="input-title"
+                            type="text"
+                            v-model="title"
+                            spellcheck="false"
+                            placeholder="Inserisci un titolo..."
+                            required
+                        />
+                        <button type="submit">Salva</button>
+                    </form>
                 </div>
                 <canvas
                     v-bind:style="{cursor: selectedCursor}"
@@ -337,7 +340,7 @@ export default {
                 .lineWidth / 2}' rx='${this.lineWidth /
                 2}' id='svg_3' cy='16' cx='16' opacity='${
                 this.isDrawing ? '1' : '0.3'
-            }' stroke-width='1.5' stroke='%23000' fill='none'/%3E%3C/g%3E%3C/svg%3E") 15 16, pointer`;
+            }' stroke-width='1.5' stroke='%23000' fill='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer`;
         },
         fillSelector() {
             if (this.currentOperation == 'source-over')

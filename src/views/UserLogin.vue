@@ -2,8 +2,21 @@
     <div class="login-view">
         <form class="login-card" @submit.prevent="login">
             <h2>Login</h2>
-            <input v-model="user.mail" id="mail" type="email" placeholder="Email" />
-            <input v-model="user.psw" id="psw" type="password" placeholder="Password" />
+            <input
+                @input="clearErr"
+                v-model="user.mail"
+                id="mail"
+                type="email"
+                placeholder="Email"
+            />
+            <input
+                @input="clearErr"
+                v-model="user.psw"
+                id="psw"
+                type="password"
+                placeholder="Password"
+            />
+            <p v-if="error" class="error-container">{{error}}</p>
             <button class="btn button" type="submit">Invio</button>
         </form>
     </div>
@@ -16,7 +29,8 @@ export default {
             user: {
                 mail: '',
                 psw: ''
-            }
+            },
+            error: ''
         };
     },
     methods: {
@@ -31,19 +45,26 @@ export default {
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
-                    const notification =  {
+                    const notification = {
                         type: 'error',
-                        message: 'Problema con il login' + err.response.data.errors
-                    }
-                    this.$store
-                .dispatch('notification/add', notification, {root: true});
-
-                    if(!err.response){
-                        this.$router.push({name: 'network-issue'})
-                    }
-                    else
-                        this.errors = err.response.data.errors;
+                        message: 'Problema con il login'
+                    };
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true
+                    });
+                    if (!err.response) {
+                        this.$router.push({ name: 'network-issue' });
+                    } else 
+                        this.error = err.response.data.err;
                 });
+        },
+        clearErr() {
+            if(this.error)
+                this.error = '';
+        },
+        createFreshObject() {
+            this.user.psw = '';
+            this.user.mail = '';
         }
     }
 };
@@ -51,6 +72,7 @@ export default {
 
 <style scoped>
 .login-view {
+    height: calc(100vh - 85px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,10 +84,6 @@ export default {
     background-color: rgba(53, 66, 94, 0.95);
     padding: 40px;
     border-radius: 4px;
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
     color: #fff;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
 }
@@ -78,7 +96,15 @@ input {
     border: none;
     border-bottom: 2.5px solid rgba(212, 212, 212, 0.6);
     border-radius: 2px 2px 2px 2px;
+    outline: none;
 }
+
+.error-container {
+    color: rgb(211, 116, 116);
+    margin-bottom: 0;
+    margin: .5em;
+}
+
 .button {
     color: whitesmoke;
     border: 2px solid rgba(212, 212, 212, 0.6);
@@ -86,7 +112,7 @@ input {
 }
 
 .button:hover {
-    background-color:rgba(200,219,253);
+    background-color: rgba(200, 219, 253);
     color: rgb(70, 70, 70);
     border-color: rgb(200, 219, 253);
 }

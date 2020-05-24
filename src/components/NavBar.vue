@@ -3,12 +3,12 @@
         <router-link to="/" :class="this.$route.name == 'Home'? 'selected' : ''" class="navbar-brand navbar-link">Home</router-link>
         <router-link v-if="!loggedIn" to="/login" :class="this.$route.name == 'login'? 'selected' : ''" class="navbar-brand navbar-link">Login</router-link>
         <router-link v-if="!loggedIn" to="/register" :class="this.$route.name == 'register'? 'selected' : ''" class="navbar-brand register-btn">Registrati</router-link>
-        <router-link v-if="loggedIn" to="/Draw" :class="this.$route.name == 'draw'? 'selected' : ''" class="navbar-brand navbar-link">Disegna</router-link>
+        <router-link v-if="loggedIn" to="/Draw" :class="this.$route.name == 'draw'? 'selected' : ''" class="navbar-brand navbar-link draw-link">Disegna</router-link>
         <router-link
             v-if="loggedIn"
             :class="this.$route.name == 'gallery'? 'selected' : ''"
             :to="{name: 'gallery', params: {user: user.nickname}}"
-            class="navbar-brand navbar-link"
+            class="navbar-brand navbar-link gallery-link"
         >Galleria</router-link>
 
         <p v-if="loggedIn" class="navbar-brand welcome">Benvenuto, {{user.nickname}}</p>
@@ -25,6 +25,11 @@
 
 <script>
 export default {
+    data() {
+        return {
+            ricerca: ''
+        }
+    },
     computed: {
         loggedIn() {
             return this.$store.getters['user/loggedIn'];
@@ -53,6 +58,7 @@ export default {
 .navbar {
     background-color: rgb(53, 66, 94);
     justify-content: left;
+    z-index: 1;
 }
 
 .navbar-link {
@@ -100,5 +106,14 @@ export default {
     background-color: rgb(200, 219, 253);
     color: rgb(53, 66, 94);
     border-color: rgb(200, 219, 253);
+}
+
+@media screen and (max-width: 700px) {
+    .gallery-link {
+        display: none;
+    }
+    .draw-link {
+        display: none;
+    }
 }
 </style>

@@ -3,7 +3,7 @@
         <NavBar />
         <NotificationContainer class="notification-box" />
         <transition name="slide-fade" mode="out-in">
-            <router-view />
+            <router-view :key="$route.fullPath"/>
         </transition>
     </div>
 </template>
@@ -52,7 +52,7 @@ body {
 
 .notification-box {
     position: fixed;
-    right: 0px;
+    left: 0px;
     z-index: 10;
 }
 </style>

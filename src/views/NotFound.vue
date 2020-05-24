@@ -7,7 +7,10 @@
             <h1>Ops! Pagina non trovata</h1>
             <h3>Forse hai aperto la finestra sbagliata</h3>
         </div>
-        <router-link to="/" class="tornaHome">Torna alla Home</router-link>
+        <div class="btn-section">
+            <router-link to="/" class="tornaHome">Home</router-link>
+            <a @click="$router.go(-1)">Indietro</a>
+        </div>
     </div>
 </template>
 
@@ -22,7 +25,6 @@ export default {};
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Comic Sans MS';
 }
 .img-wrapper {
     width: 500px;
@@ -44,14 +46,33 @@ h3 {
     font-size: 30px;
 }
 .tornaHome {
-    margin-top: 20px;
     padding: 0.2rem 0.6rem 0.3rem 0.6rem;
     border: solid 3px black;
     border-radius: 5px;
-    background-color: rgb(18, 185, 155);
+    background-color: rgb(71, 156, 236);
     color: black;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
     font-size: 25px;
     font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    margin: .5rem;
+    padding: 0.2rem 0.6rem 0.3rem 0.6rem;
+    border: solid 3px black;
+    border-radius: 5px;
+    background-color: rgb(71, 156, 236);
+    color: black;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+    font-size: 25px;
+    font-weight: bold;
+}
+a:hover {
+    color: black;
+    cursor: pointer;
+}
+.btn-section {
+    margin: .5rem;
 }
 </style>

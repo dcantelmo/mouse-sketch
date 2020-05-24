@@ -1,5 +1,5 @@
 <template>
-    <div class="notification-bar" :class="notificationTypeClass">
+    <div ref="not" class="notification-bar" :class="notificationTypeClass">
         <p>{{notification.message}}</p>
     </div>
 </template>
