@@ -110,7 +110,7 @@ export default {
 }
 
 .page {
-    height: calc(100vh - 85px);
+    height: calc(95vh - 85px);
     display: flex;
     padding-top: 2rem;
     padding-bottom: 2rem;

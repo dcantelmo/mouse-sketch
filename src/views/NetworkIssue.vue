@@ -7,7 +7,7 @@
             <h1>Ops! Nessuna connessione</h1>
             <h3>Connetti il dispositivo ad internet e riprova</h3>
         </div>
-        <router-link to="/" class="tornaHome">Home</router-link>
+        <router-link to="/" class="home">Home</router-link>
     </div>
 </template>
 
@@ -43,12 +43,24 @@ h1 {
 h3 {
     font-size: 30px;
 }
-.tornaHome {
-    margin-top: 20px;
+.home {
     padding: 0.2rem 0.6rem 0.3rem 0.6rem;
     border: solid 3px black;
     border-radius: 5px;
-    background-color: rgb(18, 185, 155);
+    background-color: rgb(71, 156, 236);
+    color: black;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+    font-size: 25px;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    margin: .5rem;
+    padding: 0.2rem 0.6rem 0.3rem 0.6rem;
+    border: solid 3px black;
+    border-radius: 5px;
+    background-color: rgb(71, 156, 236);
     color: black;
     box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
     font-size: 25px;

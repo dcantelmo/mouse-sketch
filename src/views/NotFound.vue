@@ -8,7 +8,7 @@
             <h3>Forse hai aperto la finestra sbagliata</h3>
         </div>
         <div class="btn-section">
-            <router-link to="/" class="tornaHome">Home</router-link>
+            <router-link to="/" class="home">Home</router-link>
             <a @click="$router.go(-1)">Indietro</a>
         </div>
     </div>
@@ -45,7 +45,7 @@ h1 {
 h3 {
     font-size: 30px;
 }
-.tornaHome {
+.home {
     padding: 0.2rem 0.6rem 0.3rem 0.6rem;
     border: solid 3px black;
     border-radius: 5px;

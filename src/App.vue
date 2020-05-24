@@ -52,7 +52,8 @@ body {
 
 .notification-box {
     position: fixed;
-    left: 0px;
+    left: 5%;
     z-index: 10;
 }
+
 </style>

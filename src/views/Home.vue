@@ -47,7 +47,8 @@
             </div>
         </section>
         <section class="footer">
-            <h4>Lavori in corso...</h4>
+            <img src="../assets/scritta_w2.png" alt="">
+            <p>Sito realizzato da Daniele Cantelmo e Chiara Colaizzi</p>
         </section>
     </div>
 </template>
@@ -113,6 +114,8 @@ img {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+
+
 
 @media screen and (max-width: 700px) {
     img {

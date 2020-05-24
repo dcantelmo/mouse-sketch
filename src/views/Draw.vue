@@ -433,6 +433,7 @@ button:hover {
 }
 .canvas-container {
     min-height: 750px;
+    padding-top: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;

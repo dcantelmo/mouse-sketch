@@ -211,7 +211,7 @@ h1 {
 
 .main-container {
     padding: 2rem;
-    height: calc(100vh - 85px);
+    height: calc(-85px + 95vh);
     max-height: 100%;
     display: flex;
     align-items: center;
@@ -238,6 +238,7 @@ h1 {
     justify-content: space-evenly;
     padding: 1rem;
     height: 100%;
+    scrollbar-width: thin;
     -webkit-box-shadow: inset 4px 4px 5px 0px rgba(0, 0, 0, 0.71);
     -moz-box-shadow: inset 4px 4px 5px 0px rgba(0, 0, 0, 0.71);
     box-shadow: inset 3px 0px 5px 0px rgba(0, 0, 0, 0.25);

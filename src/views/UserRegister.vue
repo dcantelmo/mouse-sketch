@@ -85,7 +85,7 @@ export default {
 
 <style scoped>
 .register-view {
-    height: calc(100vh - 85px);
+    height: calc(95vh - 85px);
     display: flex;
     align-items: center;
     justify-content: center;
