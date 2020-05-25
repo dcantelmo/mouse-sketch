@@ -4,6 +4,7 @@
             <form class="form" @submit.prevent="login">
                 <h2>Login</h2>
                 <input
+                    required
                     @input="clearErr"
                     v-model="user.mail"
                     id="mail"
@@ -11,6 +12,7 @@
                     placeholder="Email"
                 />
                 <input
+                    required
                     @input="clearErr"
                     v-model="user.psw"
                     id="psw"
@@ -18,11 +20,13 @@
                     placeholder="Password"
                 />
                 <p v-if="error" class="error-container">{{error}}</p>
-                <button class="btn button" type="submit">Invio</button> 
+                <button class="btn button" type="submit">Invio</button>
             </form>
-            <router-link class="go-to" :to="{name: 'register'}">Non sei registrato? Iscriviti adesso!</router-link>
+            <router-link
+                class="go-to"
+                :to="{name: 'register'}"
+            >Non sei registrato? Iscriviti adesso!</router-link>
         </div>
-        
     </div>
 </template>
 
@@ -58,13 +62,11 @@ export default {
                     });
                     if (!err.response) {
                         this.$router.push({ name: 'network-issue' });
-                    } else 
-                        this.error = err.response.data.err;
+                    } else this.error = err.response.data.err;
                 });
         },
         clearErr() {
-            if(this.error)
-                this.error = '';
+            if (this.error) this.error = '';
         },
         createFreshObject() {
             this.user.psw = '';
@@ -106,7 +108,7 @@ input {
 .error-container {
     color: rgb(211, 116, 116);
     margin-bottom: 0;
-    margin: .5em;
+    margin: 0.5em;
 }
 
 .button {

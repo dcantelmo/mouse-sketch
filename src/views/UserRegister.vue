@@ -4,6 +4,7 @@
             <form class="form" @submit.prevent="register">
                 <h2>Register</h2>
                 <input
+                    required
                     @input="clearErr"
                     v-model="user.name"
                     id="name"
@@ -12,6 +13,7 @@
                     autocomplete="none"
                 />
                 <input
+                    required
                     @input="clearErr"
                     v-model="user.mail"
                     id="mail"
@@ -19,6 +21,7 @@
                     placeholder="Email"
                 />
                 <input
+                    required
                     @input="clearErr"
                     v-model="user.psw"
                     id="psw"
