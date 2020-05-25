@@ -1,32 +1,35 @@
 <template>
     <div class="register-view">
-        <form class="register-card" @submit.prevent="register">
-            <h2>Register</h2>
-            <input
-                @input="clearErr"
-                v-model="user.name"
-                id="name"
-                type="text"
-                placeholder="Nome"
-                autocomplete="none"
-            />
-            <input
-                @input="clearErr"
-                v-model="user.mail"
-                id="mail"
-                type="email"
-                placeholder="Email"
-            />
-            <input
-                @input="clearErr"
-                v-model="user.psw"
-                id="psw"
-                type="password"
-                placeholder="Password"
-            />
-            <p v-if="error" class="error-container">{{error}}</p>
-            <button class="btn button" type="submit">Invio</button>
-        </form>
+        <div class="register-card">
+            <form class="form" @submit.prevent="register">
+                <h2>Register</h2>
+                <input
+                    @input="clearErr"
+                    v-model="user.name"
+                    id="name"
+                    type="text"
+                    placeholder="Nome"
+                    autocomplete="none"
+                />
+                <input
+                    @input="clearErr"
+                    v-model="user.mail"
+                    id="mail"
+                    type="email"
+                    placeholder="Email"
+                />
+                <input
+                    @input="clearErr"
+                    v-model="user.psw"
+                    id="psw"
+                    type="password"
+                    placeholder="Password"
+                />
+                <p v-if="error" class="error-container">{{error}}</p>
+                <button class="btn button" type="submit">Invio</button>
+            </form>
+            <router-link class="go-to" :to="{name: 'login'}">Hai già un account? Effettua l'accesso</router-link>
+        </div>
     </div>
 </template>
 
@@ -127,5 +130,17 @@ input {
     background-color: rgba(200, 219, 253);
     color: rgb(70, 70, 70);
     border-color: rgb(200, 219, 253);
+}
+.form {
+    margin-bottom: 15px;
+}
+.go-to {
+    color: rgba(200, 219, 253);
+    font-size: 14px;
+}
+
+.go-to:hover {
+    color: rgb(106, 160, 255);
+    text-decoration: none;
 }
 </style>

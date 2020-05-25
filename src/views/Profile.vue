@@ -112,8 +112,8 @@ export default {
 .page {
     height: calc(95vh - 85px);
     display: flex;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 5%;
+    padding-bottom: 5%;
     align-items: center;
     justify-content: center;
 }
@@ -134,12 +134,13 @@ a {
 }
 
 .card-container {
-    width: 90%;
+    width: 60%;
     background-color: white;
     -webkit-box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
+    transition: width .75s ease-in;
 }
 
 .profile-container {
@@ -149,8 +150,8 @@ a {
 }
 
 .profile-picture {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 5%;
+    padding-bottom: 5%;
     border-bottom: solid rgb(200, 219, 253) 2px;
 }
 
@@ -167,17 +168,16 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 25px;
     color: rgba(53, 66, 94, 0.75);
 }
 
 .nick-box {
     width: 80%;
     height: auto;
-    margin: 2rem;
-    padding: 2rem;
+    margin: 5%;
+    padding: 10%;
     border: solid rgb(200, 219, 253) 3px;
-    font-size: 5vw;
+    font-size: 3vw;
     font-weight: 500;
 }
 .nick-box > p {
@@ -260,9 +260,17 @@ input::selection {
     font-size: 6vw;
 }
 
-@media screen and (max-height: 600px) {
-    .page {
-        height: auto;
+@media screen and (max-width: 950px) {
+    .card-container{
+        width: 80%;
+    }
+    input{
+        width: 80%;
+        font-size: 15px;
+    }
+    .bi-search {
+        width: 1rem;
+        height: 1rem;
     }
 }
 </style>
