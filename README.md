@@ -15,5 +15,7 @@ npm run serve
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Utilizzo
+```
+Per il corretto utilizzo dell'applicazione deve essere avviato il server relativo
+```
