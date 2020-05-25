@@ -319,14 +319,24 @@ export default {
             EventService.saveToGallery(bodyFormData)
                 .then(res => {
                     console.log(res);
-                    const notification =  {
+                    const notification = {
                         type: 'success',
                         message: res.data
-                    }
-                    this.$store
-                .dispatch('notification/add', notification, {root: true});
+                    };
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true
+                    });
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    const notification = {
+                        type: 'error',
+                        message: err.response.data
+                    };
+                    this.$store.dispatch('notification/add', notification, {
+                        root: true
+                    });
+                    this.title = '';
+                });
         }
     },
     computed: {

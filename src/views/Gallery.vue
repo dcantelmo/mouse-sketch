@@ -17,7 +17,6 @@
         <div class="menu" ref="customMenu">
             <ul class="menu-options">
                 <li @click="setAvatar" class="menu-option">Imposta avatar</li>
-                <li class="menu-option">Salva</li>
                 <li @click="rename" class="menu-option">Modifica nome</li>
                 <hr class="divider" />
                 <li @click="removeImg" class="menu-option">Elimina</li>

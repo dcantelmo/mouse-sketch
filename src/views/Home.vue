@@ -47,7 +47,7 @@
             </div>
         </section>
         <section class="footer">
-            <img src="../assets/scritta_w2.png" alt="">
+            <img class="footer-img" src="../assets/scritta_w3.png" alt="">
             <p>Sito realizzato da Daniele Cantelmo e Chiara Colaizzi</p>
         </section>
     </div>
@@ -115,6 +115,9 @@ img {
     padding-bottom: 2rem;
 }
 
+.footer-img {
+    padding-bottom: 2rem;
+}
 
 
 @media screen and (max-width: 700px) {
