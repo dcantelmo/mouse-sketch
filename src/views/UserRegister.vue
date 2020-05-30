@@ -61,12 +61,11 @@ export default {
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
-                    this.error = err.response.data
+                    this.error = err.response.data; //Visualizza l'errore sul register card
                     console.log(this.errors);
                     const notification = {
                         type: 'error',
-                        message:
-                            'Problema con la registrazione '
+                        message: 'Problema con la registrazione '
                     };
                     this.$store.dispatch('notification/add', notification, {
                         root: true
@@ -77,8 +76,7 @@ export default {
                 });
         },
         clearErr() {
-            if (this.error) 
-                this.error = '';
+            if (this.error) this.error = '';
         },
         createFreshObject() {
             this.user.name = '';
@@ -121,7 +119,7 @@ input {
 .error-container {
     color: rgb(211, 116, 116);
     margin-bottom: 0;
-    margin: .5em;
+    margin: 0.5em;
 }
 
 .button {

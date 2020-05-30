@@ -1,9 +1,12 @@
 <template>
     <div id="app">
         <NavBar />
+        <!-- La NavBar resta fissa sulla pagina -->
         <NotificationContainer class="notification-box" />
+        <!-- La barra delle notifiche rimane invisibile senza notifiche -->
         <transition name="slide-fade" mode="out-in">
-            <router-view :key="$route.fullPath"/>
+            <router-view :key="$route.fullPath" />
+            <!-- Qui viene renderizzato il corpo delle pagine-->
         </transition>
     </div>
 </template>
@@ -55,5 +58,4 @@ body {
     left: 5%;
     z-index: 10;
 }
-
 </style>

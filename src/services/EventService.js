@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+//INDIRIZZO del server, da cambiare concordatamente con il server-api
 const baseURL = 'http://localhost:3000';
 
 const apiClient = axios.create({
@@ -29,7 +30,7 @@ export default {
     saveToGallery(multiform) {
         return apiClient.post(`/draw`, multiform);
     },
-    galleryOptions(data,user) {
+    galleryOptions(data, user) {
         return apiClient.post(`/profile/${user}/gallery/option`, data);
     },
     methods: {

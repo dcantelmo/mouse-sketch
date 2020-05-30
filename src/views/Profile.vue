@@ -74,6 +74,7 @@ export default {
         console.log(this.$route.params.user);
     },
     beforeRouteUpdate(routeTo, routeFrom, next) {
+        //Richiesta AJAX
         EventService.getUserProfile(routeTo.params.user)
             .then(({ data }) => {
                 routeTo.params.localUser = data;
@@ -98,7 +99,7 @@ export default {
                 this.$router.push({
                     name: 'profile',
                     params: { user: this.ricerca }
-                });
+                }); //Vai al profilo col parametro specificato
         }
     }
 };
@@ -140,7 +141,7 @@ a {
     -moz-box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 4px 6px 5px 0px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    transition: width .75s ease-in;
+    transition: width 0.75s ease-in;
 }
 
 .profile-container {
@@ -229,7 +230,6 @@ input::selection {
     margin-bottom: 5px;
 }
 
-
 .option-container {
     padding: 1rem;
     display: flex;
@@ -261,10 +261,10 @@ input::selection {
 }
 
 @media screen and (max-width: 950px) {
-    .card-container{
+    .card-container {
         width: 80%;
     }
-    input{
+    input {
         width: 80%;
         font-size: 15px;
     }

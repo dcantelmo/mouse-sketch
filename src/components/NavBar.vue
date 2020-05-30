@@ -21,7 +21,7 @@
                 >Galleria</router-link>
             </div>
             <div class="img-wrapper">
-                <img class="img-logo" src="../assets/scritta_w3.png" alt="">
+                <img class="img-logo" src="../assets/scritta_w3.png" alt />
             </div>
             <div class="right">
                 <p v-if="loggedIn" class="navbar-brand welcome">Benvenuto, {{user.nickname}}</p>
@@ -67,7 +67,8 @@ export default {
     methods: {
         logout() {
             this.$store.dispatch('user/logout');
-            this.$router.push({name: 'Home'});
+            this.$router.push({ name: 'Home' });
+            //DOPO il logout, riporta alla Home
         }
     }
 };
@@ -189,7 +190,7 @@ export default {
     }
 }
 @media screen and (max-width: 800px) {
-    .img-wrapper{
+    .img-wrapper {
         display: none;
     }
     .left {
@@ -197,8 +198,6 @@ export default {
     }
     .right {
         position: initial;
-     
-
     }
 }
 </style>

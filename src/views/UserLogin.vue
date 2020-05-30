@@ -62,7 +62,7 @@ export default {
                     });
                     if (!err.response) {
                         this.$router.push({ name: 'network-issue' });
-                    } else this.error = err.response.data.err;
+                    } else this.error = err.response.data.err; //Visualizza l'errore sul login card
                 });
         },
         clearErr() {

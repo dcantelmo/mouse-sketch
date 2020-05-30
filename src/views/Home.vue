@@ -47,18 +47,14 @@
             </div>
         </section>
         <section class="footer">
-            <img class="footer-img" src="../assets/scritta_w3.png" alt="">
+            <img class="footer-img" src="../assets/scritta_w3.png" alt />
             <p>Sito realizzato da Daniele Cantelmo e Chiara Colaizzi</p>
         </section>
     </div>
 </template>
 
 <script>
-export default {
-    created(){
-        console.log(this.$route);
-    }
-};
+export default {};
 </script>
 
 <style scoped>
@@ -118,7 +114,6 @@ img {
 .footer-img {
     padding-bottom: 2rem;
 }
-
 
 @media screen and (max-width: 700px) {
     img {

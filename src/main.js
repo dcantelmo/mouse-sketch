@@ -9,11 +9,12 @@ new Vue({
     router,
     store,
     created() {
+        //Quando la pagina viene ricaricata, reinserisci il token precedentemente salvato nel browser
         const userString = localStorage.getItem('user');
         if (userString) {
             const userData = JSON.parse(userString);
             this.$store.commit('user/SET_USER_DATA', userData);
         }
     },
-    render: h => h(App)
+    render: h => h(App) //Renderizza App.vue
 }).$mount('#app');

@@ -116,7 +116,7 @@ export default {
             title: '',
             context: null,
             isDrawing: false,
-            history: [],
+            history: [], //Vettore che conserva tutti i tratti effettuati
             point: {
                 x: Number,
                 y: Number
@@ -142,11 +142,12 @@ export default {
         };
     },
     mounted() {
-        this.setCanvas();
-        this.bindEvents();
+        this.setCanvas(); //Inizializzazione Canvas
+        this.bindEvents(); //Collegamento eventi al DOM
     },
     methods: {
         newStroke(eventPoint) {
+            //Crea tratto con informazioni attuali, da inserire poi nell'history
             return {
                 operation: this.context.globalCompositeOperation,
                 strokeColor: this.context.strokeStyle,
@@ -210,12 +211,14 @@ export default {
                 e.preventDefault();
                 console.log(e.deltaY);
                 if (e.deltaY <= -1) {
+                    //Movimento rotellina in su
                     if (this.lineWidth < 28) {
                         this.lineWidth += 2;
                         this.context.lineWidth = this.lineWidth;
                     }
                 } else if (e.deltaY >= 1)
                     if (this.lineWidth > 4) {
+                        //Movimento rotellina in giù
                         this.context.lineWidth = this.lineWidth;
                         this.lineWidth -= 2;
                     }
@@ -233,6 +236,7 @@ export default {
             });
         },
         draw(event) {
+            //Metodo richiamato ad ogni movimento del mouse sul canvas
             if (!this.isDrawing) return;
             else {
                 this.context.beginPath();
@@ -245,6 +249,7 @@ export default {
             }
         },
         setColor(event) {
+            //Cambio colore, impostato sui box sotto il canvas
             this.selectedColor = this.availableColors[event.target.id];
             this.activeBtn = event.target.id;
             if (this.selectedColor == undefined)
@@ -252,6 +257,7 @@ export default {
             else this.context.strokeStyle = this.selectedColor;
         },
         redraw() {
+            //Funzione per il tasto "indietro", ridisegna i tratti tranne l'ultimo
             if (this.lastStrokeHistory.length < 2) return;
             let index = this.lastStrokeHistory[
                 this.lastStrokeHistory.length - 2
@@ -276,11 +282,13 @@ export default {
             this.context.stroke();
         },
         clear() {
+            //Pulisce il canvas
             this.context.clearRect(0, 0, this.width, this.height);
             this.lastStrokeHistory = [0];
             this.history = [];
         },
         setOperation() {
+            //Imposta la funzione penna/gomma "source-over"/"destination-out"
             if (this.currentOperation == 'source-over') {
                 this.currentOperation = 'destination-out';
                 this.context.globalCompositeOperation = this.currentOperation;
@@ -313,6 +321,7 @@ export default {
             });
         },
         sendForm(blob) {
+            //Invia l'immagine al server in formato BLOB, con il relativo titolo
             let bodyFormData = new FormData();
             bodyFormData.set('title', this.title);
             bodyFormData.append('file', blob);
@@ -344,6 +353,7 @@ export default {
             return this.currentOperation == 'source-over' ? 'Gomma' : 'Penna';
         },
         selectedCursor() {
+            //Cursore dinamico
             return `url("data:image/svg+xml,%3Csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cellipse opacity='${
                 this.isDrawing ? '1' : '0.3'
             }' stroke='%23000' ry='15' rx='15' id='svg_2' cy='16' cx='16' stroke-opacity='null' stroke-width='2' fill='none'/%3E%3Cellipse ry='${this
@@ -359,6 +369,7 @@ export default {
         },
 
         widthSelector() {
+            //Icona dinamica per la selezione del tratto
             return `data:image/svg+xml,%3Csvg width='32' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cellipse opacity='1' stroke='%23000' ry='15' rx='15' id='svg_2' cy='16' cx='16' stroke-opacity='null' stroke-width='2' fill='none'/%3E%3Cellipse ry='${this
                 .lineWidth / 2}' rx='${this.lineWidth /
                 2}' id='svg_3' cy='16' cx='16' stroke-opacity='null' stroke-width='1.5' stroke='%23000' fill='${

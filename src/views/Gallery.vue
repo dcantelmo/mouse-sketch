@@ -3,6 +3,7 @@
         <div class="gallery-card">
             <div class="gallery-scroll overflow-auto">
                 <h1 v-if="urls == ''">La galleria è vuota! Comincia a disegnare :)</h1>
+                <!-- Le immagini vengono visualizzate tramite il v-for -->
                 <ImageBox
                     :id="image.name"
                     :class="clicked == image.name ? 'active': ''"
@@ -14,6 +15,7 @@
                 />
             </div>
         </div>
+        <!-- Contextmenu (click destro) personalizzato, la posizione e la visibilità viene aggiornata con JS -->
         <div class="menu" ref="customMenu">
             <ul class="menu-options">
                 <li @click="setAvatar" class="menu-option">Imposta avatar</li>
@@ -50,6 +52,7 @@ export default {
     },
     created() {
         this.urls = [];
+        //Inserisci URL all'interno del vettore nello state, in modo da visualizzare tutte le immagini
         this.response.data.forEach(element => {
             this.urls.push({
                 path: EventService.baseURL + element.path.substr(1),
@@ -58,20 +61,21 @@ export default {
         });
     },
     beforeRouteUpdate(routeTo, routeFrom, next) {
-            EventService.getImagesURL(routeTo.params.user)
-                .then(response => {
-                    console.log(response);
-                    routeTo.params.response = response;
-                    next();
-                })
-                .catch(error => {
-                    if (error.response) {
-                        if (error.response.status == 404) next({ name: '404' });
-                    } else next({ name: 'network-issue' });
-                });
+        //Reperisci URL per le immagini da visualizzare in base all'utente
+        EventService.getImagesURL(routeTo.params.user)
+            .then(response => {
+                console.log(response);
+                routeTo.params.response = response;
+                next();
+            })
+            .catch(error => {
+                if (error.response) {
+                    if (error.response.status == 404) next({ name: '404' });
+                } else next({ name: 'network-issue' });
+            });
     },
     mounted() {
-        //Se l'utente è il proprietario della gallery, monta il context menù per interagire con i disegni (i controlli vanno effettuati anche lato server)
+        //Se l'utente è il proprietario della gallery, monta il context menù per interagire con i disegni
         if (
             this.$store.state.user.user.nickname == this.$route.params['user']
         ) {
@@ -79,6 +83,7 @@ export default {
             const menu = this.$refs['customMenu'];
             this.menuVisible = false;
 
+            //Rendi il menù visibile o invisibile a secondo del comando inserito
             const toggleMenu = command => {
                 if (command == 'none') {
                     this.clicked = null;
@@ -88,6 +93,7 @@ export default {
                 menu.style.display = command;
             };
 
+            //Imposta la posizione del menù a seconda del click del mouse
             const setPosition = ({ top, left }, target) => {
                 menu.style.left = `${left}px`;
                 menu.style.top = `${top}px`;
@@ -105,11 +111,13 @@ export default {
             });
 
             page.addEventListener('contextmenu', e => {
+                //Previene la funzione di default, impedisce l'apertura del menù di default
                 e.preventDefault();
                 const origin = {
                     left: e.pageX,
                     top: e.pageY
                 };
+                //Attiva il menù solo se viene utilizzato sulle immagini
                 if (e.target.parentNode.className.includes('imageBox'))
                     setPosition(origin, e.target.parentNode);
                 else toggleMenu('none');
@@ -119,6 +127,7 @@ export default {
     },
     methods: {
         rename() {
+            //Funzione che rinomina l'immagine, rende editable lo span sotto di essa
             this.lastTooltip.addEventListener('blur', event => {
                 event.target.contentEditable = 'false';
                 let data = {
@@ -126,6 +135,7 @@ export default {
                     oldTitle: this.lastClicked,
                     newTitle: event.target.textContent
                 };
+                //Invia al server il nuovo nome
                 EventService.galleryOptions(
                     data,
                     this.$store.state.user.user.nickname
@@ -150,6 +160,7 @@ export default {
             console.log('rinominazione in corso');
         },
         removeImg() {
+            //Funzione che rimuove l'immagine scelta
             let data = {
                 mode: 'DELETE',
                 title: this.lastClicked,
@@ -170,6 +181,7 @@ export default {
                 });
         },
         setAvatar() {
+            //Funzione che imposta l'avatar
             let data = {
                 mode: 'SET_AVATAR',
                 title: this.lastClicked,
@@ -196,7 +208,6 @@ export default {
                     });
                 });
         }
-        //AUXILIARY ONLY
     }
 };
 </script>

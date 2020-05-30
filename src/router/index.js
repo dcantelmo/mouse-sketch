@@ -40,7 +40,9 @@ const routes = [
         component: Profile,
         meta: { requiresAuth: true },
         props: true,
+        //Prima di entrare nella Route
         beforeEnter(routeTo, routeFrom, next) {
+            //Richiesta AJAX per informazioni del profilo
             EventService.getUserProfile(routeTo.params.user)
                 .then(({ data }) => {
                     routeTo.params.localUser = data;
@@ -59,7 +61,9 @@ const routes = [
         component: Gallery,
         meta: { requiresAuth: true },
         props: true,
+        //Prima di entrare nella Route
         beforeEnter(routeTo, routeFrom, next) {
+            //Richiest AJAX per le immagini della galleria
             EventService.getImagesURL(routeTo.params.user)
                 .then(response => {
                     console.log(response);
@@ -84,6 +88,7 @@ const routes = [
         component: NetworkIssue
     },
     {
+        //Catch-all: Ogni percorso che non si trova nei precedenti viene reindirizzato a 404
         path: '*',
         redirect: { name: 404 }
     }
@@ -102,6 +107,5 @@ router.beforeEach((to, from, next) => {
     }
     next();
 });
-
 
 export default router;

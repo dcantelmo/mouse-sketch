@@ -19,9 +19,13 @@ export default {
             timeout: null
         };
     },
-    
+
     mounted() {
-        this.timeout = setTimeout(() => this.remove(this.notification.id), 3000);
+        //Applica un timer che rimuove la notifica dopo 3s
+        this.timeout = setTimeout(
+            () => this.remove(this.notification.id),
+            3000
+        );
     },
     beforeDestroy() {
         clearTimeout(this.timeout);
