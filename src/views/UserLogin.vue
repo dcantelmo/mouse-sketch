@@ -20,7 +20,7 @@
                     placeholder="Password"
                 />
                 <p v-if="error" class="error-container">{{error}}</p>
-                <button class="btn button" type="submit">Invio</button>
+                <button ref="loginBtn" class="btn button" type="submit">Invio</button>
             </form>
             <router-link
                 class="go-to"
@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         login() {
+            this.$refs['loginBtn'].disabled = true;
             console.log('Logging in...');
             this.$store
                 .dispatch('user/login', {
@@ -50,9 +51,11 @@ export default {
                     password: this.user.psw
                 })
                 .then(() => {
+                    this.$refs['loginBtn'].disabled = false;
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
+                    this.$refs['loginBtn'].disabled = false;
                     const notification = {
                         type: 'error',
                         message: 'Problema con il login'
@@ -121,6 +124,10 @@ input {
     background-color: rgba(200, 219, 253);
     color: rgb(70, 70, 70);
     border-color: rgb(200, 219, 253);
+}
+
+.button:disabled {
+    cursor: wait;
 }
 
 .form {

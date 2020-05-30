@@ -14,7 +14,7 @@
                             placeholder="Inserisci un titolo..."
                             required
                         />
-                        <button type="submit">Salva</button>
+                        <button ref="saveBtn" class="save-btn" type="submit">Salva</button>
                     </form>
                 </div>
                 <canvas
@@ -325,8 +325,11 @@ export default {
             let bodyFormData = new FormData();
             bodyFormData.set('title', this.title);
             bodyFormData.append('file', blob);
+            this.$refs['saveBtn'].disabled = true;
             EventService.saveToGallery(bodyFormData)
                 .then(res => {
+                    this.$refs['saveBtn'].disabled = false;
+
                     console.log(res);
                     const notification = {
                         type: 'success',
@@ -337,14 +340,19 @@ export default {
                     });
                 })
                 .catch(err => {
-                    const notification = {
-                        type: 'error',
-                        message: err.response.data
-                    };
-                    this.$store.dispatch('notification/add', notification, {
-                        root: true
-                    });
-                    this.title = '';
+                    this.$refs['saveBtn'].disabled = false;
+                    if (!err.response) {
+                        this.$router.push({ name: 'network-issue' });
+                    } else {
+                        const notification = {
+                            type: 'error',
+                            message: err.response.data
+                        };
+                        this.$store.dispatch('notification/add', notification, {
+                            root: true
+                        });
+                        this.title = '';
+                    }
                 });
         }
     },
@@ -417,6 +425,11 @@ button {
 button:hover {
     color: rgb(200, 219, 253);
     background-color: rgb(59, 130, 253);
+}
+
+.save-btn:disabled {
+    cursor: wait;
+    background-color: rgb(75, 216, 181);
 }
 
 .input-title {

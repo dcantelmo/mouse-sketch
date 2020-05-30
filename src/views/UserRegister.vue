@@ -29,7 +29,7 @@
                     placeholder="Password"
                 />
                 <p v-if="error" class="error-container">{{error}}</p>
-                <button class="btn button" type="submit">Invio</button>
+                <button ref="registerBtn" class="btn button" type="submit">Invio</button>
             </form>
             <router-link class="go-to" :to="{name: 'login'}">Hai già un account? Effettua l'accesso</router-link>
         </div>
@@ -50,6 +50,7 @@ export default {
     },
     methods: {
         register() {
+            this.$refs['registerBtn'].disabled = true;
             console.log('registrazione...');
             this.$store
                 .dispatch('user/register', {
@@ -58,11 +59,12 @@ export default {
                     password: this.user.psw
                 })
                 .then(() => {
+                    this.$refs['registerBtn'].disabled = false;
                     this.$router.push({ name: 'Home' });
                 })
                 .catch(err => {
+                    this.$refs['registerBtn'].disabled = false;
                     this.error = err.response.data; //Visualizza l'errore sul register card
-                    console.log(this.errors);
                     const notification = {
                         type: 'error',
                         message: 'Problema con la registrazione '
@@ -72,6 +74,7 @@ export default {
                     });
                     if (!err.response) {
                         this.$router.push({ name: 'network-issue' });
+                        //Riporta alla pagina degli errori network
                     }
                 });
         },
@@ -132,6 +135,10 @@ input {
     color: rgb(70, 70, 70);
     border-color: rgb(200, 219, 253);
 }
+.button:disabled {
+    cursor: wait;
+}
+
 .form {
     margin-bottom: 15px;
 }
